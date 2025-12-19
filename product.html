@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پکیج ایران رادیاتور مدل M24FF</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <style>
+        :root{--main: #d35400; --main-2: #e67e22; --bg: #f5f5f5; --dark: #1a1a1a; --muted: #777}
+        * {margin:0;padding:0;box-sizing:border-box;}
+        body {font-family: 'Vazir', Tahoma, sans-serif;direction: rtl;background:var(--bg);line-height: 1.6;}
+        /* header styles (copied from index) */
+        .top-bar {background:var(--dark);color:#fff;padding:8px 0;font-size:14px;overflow:hidden;white-space:nowrap}
+        .top-bar .ticker {display:inline-block;animation: scrollLeft 25s linear infinite}
+        .top-bar span {margin-left:40px}
+        @keyframes scrollLeft {0% {transform:translateX(100%);}100% {transform:translateX(-100%);}}
+        .main-header {background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('image.png') center/cover;padding: 20px 0;box-shadow: 0 2px 10px rgba(0,0,0,0.2)}
+        .header-content {display:flex;justify-content:space-between;align-items:center;flex-wrap: wrap;gap: 15px}
+        .logo {font-size:32px;font-weight:bold;color:#fff;text-shadow: 2px 2px 8px rgba(0,0,0,0.8)}
+        .search-bar {flex:1;max-width:500px;min-width: 250px}
+        .search-bar input {width:100%;padding:12px 20px;border:2px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:#fff;border-radius:30px;outline:none;font-size:15px}
+        .search-bar input::placeholder {color:rgba(255,255,255,0.9)}
+        .header-icons a {margin-left:20px;color:#fff;text-decoration:none;font-size:14px;text-shadow: 1px 1px 4px rgba(0,0,0,0.7)}
+        nav.navbar {background:var(--main) !important;padding: 0 !important;box-shadow:0 4px 10px rgba(0,0,0,0.15)}
+        .navbar-toggler {border: 2px solid rgba(255,255,255,0.7);padding: 6px 10px}
+        .navbar-toggler:focus {box-shadow: none}
+        .navbar-toggler-icon {background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");width: 28px;height: 28px}
+        .navbar-nav {gap: 5px}
+        .nav-link {color:#fff !important;font-weight:600;padding: 15px 20px !important;transition: all 0.3s;position: relative}
+        .nav-link:hover {background: rgba(255,255,255,0.1);border-radius: 5px}
+        .footer {background:#1a1a1a;color:#ddd;padding:60px 0 20px;margin-top:80px}
+        .footer-content {display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;margin-bottom:40px}
+        .footer-section h3 {color:var(--main);margin-bottom:20px;font-size:20px}
+        .footer-section a {color:#bbb;text-decoration:none;display:block;margin-bottom:10px}
+        .footer-bottom {text-align:center;padding-top:25px;border-top:1px solid #333;color:#777;font-size:14px}
+
+        /* product styles (kept) */
+        body {padding: 40px 15px;color:#333}
+        .container {max-width:1200px;margin:0 auto}
+        .product-page {padding:40px;background:#fff;border-radius:15px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+        .product-container {display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+        .product-gallery {position:relative}
+        .main-image {width:100%;height:480px;object-fit:cover;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+        .thumbnails {display:flex;gap:12px;margin-top:15px;justify-content:center}
+        .thumb {width:90px;height:90px;object-fit:cover;border-radius:8px;cursor:pointer;border:3px solid transparent;transition:.3s}
+        .thumb.active, .thumb:hover {border-color:#d35400}
+        .product-details h1 {font-size:32px;margin-bottom:15px;color:#222}
+        .product-brand {font-size:18px;color:#d35400;margin-bottom:15px}
+        .product-code {font-size:14px;color:#777;margin-bottom:20px}
+        .price-box {background:#fef5e7;padding:20px;border-radius:12px;margin:25px 0;border:2px solid #d35400}
+        .current-price {font-size:36px;font-weight:bold;color:#d35400}
+        .old-price {font-size:20px;color:#999;text-decoration:line-through;margin-right:15px}
+        .discount-badge {background:#e74c3c;color:#fff;padding:6px 12px;border-radius:25px;font-size:14px}
+        .quantity-box {display:flex;align-items:center;gap:15px;margin:25px 0}
+        .quantity-btn {width:45px;height:45px;background:#d35400;color:#fff;border:none;border-radius:50%;font-size:24px;cursor:pointer}
+        .quantity-input {width:80px;height:45px;text-align:center;font-size:18px;border:2px solid #ddd;border-radius:8px}
+        .add-to-cart-big {background:#d35400;color:#fff;padding:16px 0;width:100%;border:none;border-radius:12px;font-size:20px;font-weight:bold;cursor:pointer;transition:.3s;margin-top:15px}
+        .add-to-cart-big:hover {background:#e67e22;transform:translateY(-3px)}
+        .features-list {margin:30px 0}
+        .features-list li {padding:8px 0;display:flex;align-items:center;gap:12px;font-size:16px}
+        .tabs {margin-top:50px;border-bottom:2px solid #ddd}
+        .tab-links {display:flex;gap:30px}
+        .tab-link {padding:15px 0;font-size:18px;cursor:pointer;border-bottom:4px solid transparent;transition:.3s}
+        .tab-link.active {border-bottom:4px solid #d35400;color:#d35400;font-weight:bold}
+        .tab-content {padding:30px 0;font-size:16px;line-height:2}
+        .tab-pane {display:none}
+        .tab-pane.active {display:block}
+        .related-products {margin-top:80px}
+        .related-products h2 {font-size:28px;text-align:center;margin-bottom:40px}
+        .related-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:25px}
+        .related-card {background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:.3s}
+        .related-card:hover {transform:translateY(-8px)}
+        .related-image {height:200px;background:#fdf2e9;display:flex;align-items:center;justify-content:center;font-size:60px;color:#e67e22}
+        @media (max-width:992px) {.product-container {grid-template-columns:1fr;gap:30px}.main-image {height:380px}}
+        @media (max-width:576px) {.product-details h1 {font-size:26px}.current-price {font-size:30px}.product-page {padding:20px}}
+        .back-link{display:inline-block;margin-bottom:18px;color:#555;text-decoration:none}
+        .intro-video {max-width:1200px;margin:26px auto 10px;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.06);text-align:center}
+        .intro-video video{width:100%;height:auto;border-radius:10px}
+
+        
+        footer {
+            background:#1a1a1a;
+            color:#ddd;
+            padding:60px 0 20px;
+            margin-top:80px;
+        }
+        .footer-content {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:40px;
+            margin-bottom:40px;
+        }
+        .footer-section h3 {
+            color:var(--main);
+            margin-bottom:20px;
+            font-size:20px;
+        }
+
+        /* color switcher UI */
+        .color-controls{display:flex;gap:8px;align-items:center}
+        .color-btn{width:28px;height:28px;border-radius:6px;border:2px solid rgba(255,255,255,0.6);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.15)}
+        .color-btn.active{outline:3px solid rgba(255,255,255,0.25);transform:translateY(-2px)}
+        .footer-section a {
+            color:#bbb;
+            text-decoration:none;
+            display:block;
+            margin-bottom:10px;
+        }
+        .footer-section a:hover {
+            color:#fff;
+        }
+        .footer-bottom {
+            text-align:center;
+            padding-top:25px;
+            border-top:1px solid #333;
+            color:#777;
+            font-size:14px;
+        }
+
+        @media (max-width:768px) {
+            .slide-content h2 {font-size:32px;}
+            .slide-content p {font-size:16px;}
+            .hero-slider {height:350px;}
+        }
+    </style>
+</head>
+<body>
+    <!-- header (copied from index.html) -->
+    <div class="top-bar">
+        <div class="ticker">
+            <span>تلفن: 021-55661234</span>
+            <span>واتساپ: 09121234567</span>
+            <span>ارسال رایگان تهران و کرج</span>
+            <span>نصب حرفه‌ای پکیج و رادیاتور</span>
+            <span>ضمانت اصالت کالا</span>
+            <span>مشاوره رایگان تأسیسات</span>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">شوفاژ حیدری</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="جستجوی پکیج، رادیاتور، شیرآلات...">
+                </div>
+                <div class="header-icons" hidden>
+                    <a href="#">سبد خرید (۰)</a>
+                    <a href="#">ورود / ثبت نام</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.html">صفحه اصلی</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">محصولات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">پکیج و آبگرمکن</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">رادیاتور</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">شیرآلات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">لوله و اتصالات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">بلاگ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+ 
+    <div class="container">
+        <a class="back-link" href="index.html">« بازگشت به صفحه اصلی</a>
+        <div class="product-page">
+            <div class="product-container">
+                <!-- گالری تصاویر -->
+                <div class="product-gallery">
+                    <img src="https://via.placeholder.com/600x480/2c3e50/ffffff?text=پکیج+M24FF" alt="پکیج ایران رادیاتور M24FF" class="main-image" id="mainImg">
+                    <div class="thumbnails">
+                        <img src="https://via.placeholder.com/90?text=1" alt="" class="thumb active" onclick="changeImage(this)">
+                        <img src="https://via.placeholder.com/90?text=2" alt="" class="thumb" onclick="changeImage(this)">
+                        <img src="https://via.placeholder.com/90?text=3" alt="" class="thumb" onclick="changeImage(this)">
+                        <img src="https://via.placeholder.com/90?text=4" alt="" class="thumb" onclick="changeImage(this)">
+                    </div>
+                </div>
+
+                <!-- جزئیات محصول -->
+                <div class="product-details">
+                    <h1>پکیج دیواری ایران رادیاتور مدل M24FF</h1>
+                    <div class="product-brand">برند: ایران رادیاتور (اصل)</div>
+                    <div class="product-code">کد کالا: IR-M24FF-1403</div>
+
+                    <div class="price-box">
+                        <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <div>
+                                <span class="current-price">۲۸,۵۰۰,۰۰۰ تومان</span>
+                                <span class="old-price">۳۲,۰۰۰,۰۰۰ تومان</span>
+                            </div>
+                            <span class="discount-badge">-۱۱٪</span>
+                        </div>
+                    </div>
+
+                    <div class="quantity-box">
+                        <button class="quantity-btn" onclick="changeQty(-1)">−</button>
+                        <input type="text" value="1" class="quantity-input" id="qty">
+                        <button class="quantity-btn" onclick="changeQty(1)">+</button>
+                    </div>
+
+                    <button class="add-to-cart-big">
+                        افزودن به سبد خرید
+                    </button>
+
+                    <ul class="features-list">
+                        <li>ظرفیت حرارتی: ۲۴,۰۰۰ کیلوکالری</li>
+                        <li>دو مبدل حرارتی (گرمایش + آب گرم مصرفی)</li>
+                        <li>فن‌دار و دودکش دوجداره</li>
+                        <li>گارانتی ۲۴ ماهه ایران رادیاتور</li>
+                        <li>نصب رایگان در تهران و کرج</li>
+                        <li>ارسال فوری به سراسر کشور</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- تب‌ها -->
+            <div class="tabs">
+                <div class="tab-links">
+                    <div class="tab-link active" onclick="openTab('desc')">توضیحات</div>
+                    <div class="tab-link" onclick="openTab('specs')">مشخصات فنی</div>
+                    <div class="tab-link" onclick="openTab('reviews')">نظرات کاربران</div>
+                </div>
+
+                <div id="desc" class="tab-pane active">
+                    <div class="tab-content">
+                        <p><strong>پکیج دیواری ایران رادیاتور M24FF</strong> یکی از پرفروش‌ترین مدل‌های دو مبدل در ایران است که مناسب آپارتمان‌های تا ۱۵۰ متر مربع می‌باشد.</p>
+                        <br>
+                        <p>این پکیج با راندمان بالا، مصرف گاز بهینه و صدای بسیار کم، انتخاب اول بسیاری از مشتریان است. دارای سیستم عیب‌یابی هوشمند و صفحه نمایش دیجیتال برای تنظیم دما و نمایش خطاها.</p>
+                        <br>
+                        <p>نصب و راه‌اندازی توسط تیم مجاز ایران رادیاتور انجام می‌شود و شامل خدمات پس از فروش ۲۴ ماهه می‌باشد.</p>
+                    </div>
+                </div>
+
+                <div id="specs" class="tab-pane">
+                    <div class="tab-content">
+                        <table style="width:100%;border-collapse:collapse;">
+                            <tr><td style="padding:10px;border-bottom:1px solid #eee;">ظرفیت حرارتی</td><td style="padding:10px;border-bottom:1px solid #eee;">۲۴,۰۰۰ kcal/h</td></tr>
+                            <tr><td style="padding:10px;border-bottom:1px solid #eee;">نوع مبدل</td><td style="padding:10px;border-bottom:1px solid #eee;">دو مبدل</td></tr>
+                            <tr><td style="padding:10px;border-bottom:1px solid #eee;">فن دودکش</td><td style="padding:10px;border-bottom:1px solid #eee;">دارد (فن‌دار)</td></tr>
+                            <tr><td style="padding:10px;border-bottom:1px solid #eee;">ابعاد</td><td style="padding:10px;border-bottom:1px solid #eee;">۷۳۰×۴۰۰×۳۳۰ میلی‌متر</td></tr>
+                            <tr><td style="padding:10px;border-bottom:1px solid #eee;">وزن</td><td style="padding:10px;border-bottom:1px solid #eee;">۳۴ کیلوگرم</td></tr>
+                            <tr><td style="padding:10px;">گارانتی</td><td style="padding:10px;">۲۴ ماه ایران رادیاتور</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="reviews" class="tab-pane">
+                    <div class="tab-content">
+                        <p>هنوز نظری ثبت نشده است. اولین نفر باشید!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- محصولات مرتبط -->
+        <div class="related-products">
+            <h2>محصولات مرتبط</h2>
+            <div class="related-grid">
+                <div class="related-card">
+                    <div class="related-image">پکیج</div>
+                    <div style="padding:20px;text-align:center;">
+                        <h3>پکیج بوتان CV424</h3>
+                        <div style="color:#d35400;font-weight:bold;font-size:20px;margin:10px 0;">۳۱,۲۰۰,۰۰۰ تومان</div>
+                        <button style="background:#d35400;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">مشاهده</button>
+                    </div>
+                </div>
+                <div class="related-card">
+                    <div class="related-image">رادیاتور</div>
+                    <div style="padding:20px;text-align:center;">
+                        <h3>رادیاتور پنلی لورچ ۱۰۰ سانت</h3>
+                        <div style="color:#d35400;font-weight:bold;font-size:20px;margin:10px 0;">۲,۸۵۰,۰۰۰ تومان</div>
+                        <button style="background:#d35400;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">مشاهده</button>
+                    </div>
+                </div>
+                <div class="related-card">
+                    <div class="related-image">شیر</div>
+                    <div style="padding:20px;text-align:center;">
+                        <h3>شیرآلات قهرمان تنسو کروم</h3>
+                        <div style="color:#d35400;font-weight:bold;font-size:20px;margin:10px 0;">۸,۹۰۰,۰۰۰ تومان</div>
+                        <button style="background:#d35400;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">مشاهده</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>فروشگاه تاسیسات حیدری</h3>
+                    <p>تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت</p>
+                </div>
+                <div class="footer-section">
+                    <h3>لینک‌های سریع</h3>
+                    <a href="#">صفحه اصلی</a>
+                    <a href="#">پکیج</a>
+                    <a href="#">رادیاتور</a>
+                    <a href="#">شیرآلات</a>
+                </div>
+                <div class="footer-section">
+                    <h3>خدمات</h3>
+                    <a href="#">نصب و راه‌اندازی</a>
+                    <a href="#">خدمات پس از فروش</a>
+                    <a href="#">مشاوره رایگان</a>
+                </div>
+                <div class="footer-section">
+                    <h3>تماس با ما</h3>
+                    <p>تلفن: 021-55661234</p>
+                    <p>موبایل: 09121234567</p>
+                    <p>آدرس: تهران - خیابان انقلاب</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © ۱۴۰۴ فروشگاه تاسیسات حیدری - تمامی حقوق محفوظ است
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function changeImage(thumb) {
+            document.getElementById('mainImg').src = thumb.src;
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+        }
+
+        function changeQty(num) {
+            let qty = document.getElementById('qty');
+            let val = parseInt(qty.value) + num;
+            if (val < 1) val = 1;
+            qty.value = val;
+        }
+
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
