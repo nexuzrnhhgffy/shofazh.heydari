@@ -1,40 +1,85 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>تماس با ما — درباره شرکت</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-      .section-padding { padding-top: 4rem; padding-bottom: 4rem; }
-      .about-img { position: relative; }
-      .about-img .img { overflow: hidden; border-radius: .5rem; }
-      .about-buro { position: absolute; bottom: 1rem; right: 1rem; background: rgba(13,110,253,0.95); color: #fff; padding: .5rem .75rem; border-radius: .375rem; font-weight: 600; }
-    </style>
-  </head>
-  <body class="bg-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تماس با ما - شوفاژ حیدری</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css" rel="stylesheet">
+<style>
+:root{--main:#d35400;--main-2:#e67e22;--bg:#f5f5f5;--dark:#1a1a1a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Vazir,Tahoma,sans-serif;direction:rtl;background:var(--bg);line-height:1.6}
+.top-bar{background:var(--dark);color:#fff;padding:8px 0;font-size:14px;overflow:hidden;white-space:nowrap}
+.top-bar .ticker{display:inline-block;animation:scrollLeft 25s linear infinite}
+.top-bar span{margin-left:40px}
+@keyframes scrollLeft{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.main-header{background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),url(image.png) center/cover;padding:20px 0;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.header-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:32px;font-weight:bold;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,.8)}
+.search-bar{flex:1;max-width:500px;min-width:250px;position:relative}
+.search-bar input{width:100%;padding:12px 55px 12px 20px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.2);color:#fff;border-radius:30px;outline:none;font-size:15px}
+.search-bar input::placeholder{color:rgba(255,255,255,.9)}
+.search-btn{position:absolute;left:5px;top:50%;transform:translateY(-50%);background:var(--main);border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.search-btn:hover{background:var(--main-2);transform:translateY(-50%) scale(1.05)}
+.search-btn svg{width:20px;height:20px;fill:#fff}
+nav.navbar{background:var(--main)!important;padding:0!important;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+.navbar-toggler{border:2px solid rgba(255,255,255,.7);padding:6px 10px}
+.navbar-toggler-icon{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");width:28px;height:28px}
+.navbar-nav{gap:5px}
+.nav-link{color:#fff!important;font-weight:600;padding:15px 20px!important;transition:.3s}
+.nav-link:hover{background:rgba(255,255,255,.1);border-radius:5px}
+.breadcrumb-wrapper{background:#fff;padding:15px 0;margin-bottom:30px;box-shadow:0 2px 5px rgba(0,0,0,.05)}
+.breadcrumb{background:0 0;padding:0;margin:0;font-size:14px}
+.breadcrumb-item+.breadcrumb-item::before{content:"←";padding:0 8px;color:#999}
+.breadcrumb-item a{color:var(--main);text-decoration:none}
+.breadcrumb-item a:hover{text-decoration:underline}
+.breadcrumb-item.active{color:#666}
+.section-title{font-size:32px;margin-bottom:30px;color:#222;font-weight:bold}
+.section-title span{color:var(--main)}
+.about-section{background:#fff;padding:60px 0;margin-bottom:40px}
+.about-img{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.15)}
+.about-img img{width:100%;height:auto;display:block}
+.about-badge{position:absolute;bottom:20px;right:20px;background:var(--main);color:#fff;padding:15px 25px;border-radius:8px;font-weight:600;font-size:18px;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.contact-section{padding:60px 0;margin-bottom:40px}
+.contact-card{background:#fff;padding:40px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-bottom:30px}
+.contact-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin-bottom:40px}
+.info-item{background:#f8f8f8;padding:25px;border-radius:10px;text-align:center;transition:.3s}
+.info-item:hover{background:var(--main);color:#fff;transform:translateY(-5px)}
+.info-item i{font-size:40px;color:var(--main);margin-bottom:15px}
+.info-item:hover i{color:#fff}
+.info-item h4{font-size:18px;margin-bottom:10px;font-weight:600}
+.info-item p{margin:0;font-size:15px}
+.map-container{width:100%;height:450px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.map-container iframe{width:100%;height:100%;border:0}
+.contact-form{background:#fff;padding:40px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.form-control{padding:12px 20px;border:2px solid #e0e0e0;border-radius:8px;margin-bottom:20px}
+.form-control:focus{border-color:var(--main);box-shadow:none}
+.btn-submit{background:var(--main);color:#fff;padding:14px 40px;border:none;border-radius:8px;font-weight:600;font-size:18px;cursor:pointer;transition:.3s;width:100%}
+.btn-submit:hover{background:var(--main-2);transform:translateY(-2px)}
+footer{background:#1a1a1a;color:#ddd;padding:60px 0 20px;margin-top:80px}
+.footer-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;margin-bottom:40px}
+.footer-section h3{color:var(--main);margin-bottom:20px;font-size:20px}
+.footer-section a{color:#bbb;text-decoration:none;display:block;margin-bottom:10px}
+.footer-section a:hover{color:#fff}
+.footer-bottom{text-align:center;padding-top:25px;border-top:1px solid #333;color:#777;font-size:14px}
+@media (max-width:991px){.navbar-collapse{background:#d35400;padding:10px 0;margin-top:10px;border-radius:8px}.nav-link{border-bottom:1px solid rgba(255,255,255,.2);padding:12px 20px!important}.nav-item:last-child .nav-link{border-bottom:none}.header-content{flex-direction:column;text-align:center}.search-bar{width:100%;max-width:100%}}
+@media (max-width:768px){.section-title{font-size:26px}.contact-card,.contact-form{padding:25px}.map-container{height:300px}}
+</style>
+</head>
+<body>
+<div class="top-bar"><div class="ticker"><span>تلفن: 021-55661234</span><span>واتساپ: 09121234567</span><span>ارسال رایگان تهران و کرج</span><span>نصب حرفه‌ای پکیج و رادیاتور</span><span>ضمانت اصالت کالا</span><span>مشاوره رایگان تأسیسات</span></div></div>
+<header class="main-header"><div class="container"><div class="header-content"><div class="logo">شوفاژ حیدری</div><div class="search-bar"><input type="text" placeholder="جستجوی پکیج، رادیاتور، شیرآلات..."><button class="search-btn" type="button" aria-label="جستجو"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button></div></div></div></header>
+<nav class="navbar navbar-expand-lg sticky-top"><div class="container"><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse justify-content-center" id="mainNav"><ul class="navbar-nav"><li class="nav-item"><a class="nav-link" href="index.html">صفحه اصلی</a></li><li class="nav-item"><a class="nav-link" href="#">محصولات</a></li><li class="nav-item"><a class="nav-link" href="#">پکیج و آبگرمکن</a></li><li class="nav-item"><a class="nav-link" href="#">رادیاتور</a></li><li class="nav-item"><a class="nav-link" href="#">شیرآلات</a></li><li class="nav-item"><a class="nav-link" href="#">لوله و اتصالات</a></li><li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li></ul></div></div></nav>
+<div class="breadcrumb-wrapper"><div class="container"><nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">خانه</a></li><li class="breadcrumb-item active">تماس با ما</li></ol></nav></div></div>
 
-    <main>
-      <section id="about" class="about section-padding bg-white" data-scroll-index="1">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-6 mb-3">
-                <h2 class="section-title">درباره <span>شرکت</span></h2>
-                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
-                <p>شرکت ما بیش از چندین سال در زمینه خدمات مشاوره و راه‌اندازی کسب‌وکار فعالیت می‌کند و به مشتریان خود راهکارهای اختصاصی ارائه می‌دهد.</p>
-                <p>برای کسب اطلاعات بیشتر می‌توانید از طریق صفحه تماس با ما اقدام کنید یا به نشانی دفتر ما مراجعه نمایید.</p>
-            </div>
-            <div class="col-md-6">
-                <div class="about-img">
-                    <div class="img"> <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" class="img-fluid" alt="About image"> </div>
-                    <div class="about-img-2 about-buro">دفتر کانادا</div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+<section class="about-section"><div class="container"><div class="row align-items-center"><div class="col-md-6 mb-4"><h2 class="section-title">درباره <span>فروشگاه حیدری</span></h2><p style="font-size:16px;line-height:1.9;color:#555;margin-bottom:20px">فروشگاه تاسیسات حیدری با بیش از ۲۰ سال سابقه درخشان در زمینه فروش و نصب تجهیزات گرمایشی و سرمایشی، یکی از معتبرترین مراکز تامین لوازم تاسیساتی در استان تهران و البرز محسوب می‌شود.</p><p style="font-size:16px;line-height:1.9;color:#555;margin-bottom:20px">ما با ارائه محصولات اصل و باکیفیت از برندهای معتبر داخلی و خارجی مانند ایران رادیاتور، بوتان، پکیج ایساتیس، رادیاتورهای پنلی لورچ و شیرآلات قهرمان، همواره در تلاش هستیم تا بهترین خدمات را به مشتریان عزیز ارائه دهیم.</p><p style="font-size:16px;line-height:1.9;color:#555">تیم متخصص ما آماده است تا در زمینه مشاوره رایگان، انتخاب محصول مناسب، نصب حرفه‌ای و خدمات پس از فروش در کنار شما باشد.</p></div><div class="col-md-6"><div class="about-img"><img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&auto=format&fit=crop" alt="فروشگاه حیدری"><div class="about-badge">فروشگاه کرج</div></div></div></div></div></section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+<section class="contact-section"><div class="container"><div class="contact-card"><h2 class="section-title">اطلاعات <span>تماس</span></h2><div class="contact-info"><div class="info-item"><i>📞</i><h4>تلفن تماس</h4><p>021-55661234</p><p>026-33445566</p></div><div class="info-item"><i>📱</i><h4>موبایل و واتساپ</h4><p>09121234567</p><p>09351234567</p></div><div class="info-item"><i>📧</i><h4>ایمیل</h4><p>info@heidari.com</p><p>support@heidari.com</p></div><div class="info-item"><i>⏰</i><h4>ساعات کاری</h4><p>شنبه تا پنجشنبه</p><p>۸ صبح تا ۸ شب</p></div></div></div>
+
+<div class="row mt-5"><div class="col-lg-6 mb-4"><h3 class="section-title" style="font-size:24px">موقعیت <span>فروشگاه در کرج</span></h3><div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51405.02797307711!2d50.926523!3d35.83379!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8dff1c8c5b5c5f%3A0x1c1c5b5c5c5c5c5c!2z2qnYsdis!5e0!3m2!1sfa!2sir!4v1234567890" loading="lazy"></iframe></div></div><div class="col-lg-6"><h3 class="section-title" style="font-size:24px">فرم <span>تماس با ما</span></h3><div class="contact-form"><form><input type="text" class="form-control" placeholder="نام و نام خانوادگی" required><input type="tel" class="form-control" placeholder="شماره تماس" required><input type="email" class="form-control" placeholder="ایمیل" required><textarea class="form-control" rows="5" placeholder="پیام شما..." required></textarea><button type="submit" class="btn-submit">ارسال پیام</button></form></div></div></div></div></section>
+
+<footer><div class="container"><div class="footer-content"><div class="footer-section"><h3>فروشگاه تاسیسات حیدری</h3><p>تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت</p></div><div class="footer-section"><h3>لینک‌های سریع</h3><a href="index.html">صفحه اصلی</a><a href="#">پکیج</a><a href="#">رادیاتور</a><a href="#">شیرآلات</a></div><div class="footer-section"><h3>خدمات</h3><a href="#">نصب و راه‌اندازی</a><a href="#">خدمات پس از فروش</a><a href="#">مشاوره رایگان</a></div><div class="footer-section"><h3>تماس با ما</h3><p>تلفن: 021-55661234</p><p>موبایل: 09121234567</p><p>آدرس: کرج - میدان فردوس</p></div></div><div class="footer-bottom">© ۱۴۰۴ فروشگاه تاسیسات حیدری - تمامی حقوق محفوظ است</div></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
