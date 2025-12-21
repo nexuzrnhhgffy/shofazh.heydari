@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بلاگ و مقالات - شوفاژ حیدری</title>
+    <title>راهنمای انتخاب پکیج - شوفاژ حیدری</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css" rel="stylesheet">
     <style>
@@ -196,136 +196,110 @@
             color: #666;
         }
 
-        /* محتوای بلاگ */
-        .blog-header {
+        /* محتوای مقاله */
+        .article-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .article-header {
             background: #fff;
             padding: 30px;
             border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-        .blog-header h1 {
+        .article-header h1 {
             font-size: 32px;
             color: #222;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            line-height: 1.4;
         }
-        .blog-header p {
-            color: #666;
+        .article-meta {
+            color: #888;
+            font-size: 14px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                        url('https://via.placeholder.com/1000x400?text=راهنمای+انتخاب+پکیج') center/cover;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .article-content {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .article-content p {
+            margin-bottom: 20px;
+            line-height: 1.9;
+            color: #333;
             font-size: 16px;
+        }
+        .article-content h3 {
+            font-size: 22px;
+            color: #222;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--main);
+        }
+        .article-content strong {
+            color: var(--main);
+        }
+
+        /* مقالات مرتبط */
+        .related-articles {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 50px;
+        }
+        .related-articles h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #222;
+        }
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .related-card {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: .3s;
+            border: 2px solid transparent;
+        }
+        .related-card:hover {
+            border-color: var(--main);
+            transform: translateY(-3px);
+        }
+        .related-card h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--main);
+        }
+        .related-card p {
+            font-size: 14px;
+            color: #666;
             margin: 0;
         }
 
-        /* جستجوی مقالات */
-        .search-section {
-            background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .search-row {
-            display: flex;
-            gap: 10px;
-            align-items: stretch;
-        }
-        .search-row input {
-            flex: 1;
-            padding: 14px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-            transition: .3s;
-        }
-        .search-row input:focus {
-            border-color: var(--main);
-        }
-        .search-row .read-btn {
-            background: var(--main);
-            color: #fff;
-            padding: 14px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: .3s;
-            border: none;
-            cursor: pointer;
-        }
-        .search-row .read-btn:hover {
-            background: var(--main-2);
-            transform: translateY(-2px);
-        }
-
-        /* گرید مقالات */
-        .post-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-        .post-card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: .3s;
-            display: flex;
-            flex-direction: column;
-        }
-        .post-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-        .post-thumbnail {
-            height: 200px;
-            background: linear-gradient(135deg, #fdf2e9 0%, #fde8d7 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-        }
-        .post-content {
-            padding: 25px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .post-card h3 {
-            font-size: 19px;
-            color: #222;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        .meta {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 15px;
-            display: flex;
-            gap: 15px;
-        }
-        .excerpt {
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            flex: 1;
-        }
-        .read-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--main);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            text-align: center;
-            transition: .3s;
-        }
-        .read-btn:hover {
-            background: var(--main-2);
-        }
-
-        /* فوتر */
         footer {
             background:#1a1a1a;
             color:#ddd;
@@ -361,14 +335,14 @@
         }
 
         @media (max-width:768px) {
-            .blog-header h1 {
+            .article-header h1 {
                 font-size: 24px;
             }
-            .post-grid {
-                grid-template-columns: 1fr;
+            .article-content {
+                padding: 25px;
             }
-            .search-row {
-                flex-direction: column;
+            .hero-image {
+                height: 250px;
             }
         }
     </style>
@@ -388,7 +362,7 @@
     </div>
 
     <!-- هدر -->
-    <header class="main-header">
+    <header class="main-header"><div class="container"><div class="header-content"><div class="logo">شوفاژ حیدری</div><form method="GET" action="{{ url_for('search') }}" class="search-bar"><input name="q" value="{{ request.args.get('q','') }}" type="text" placeholder="جستجوی پکیج، رادیاتور، شیرآلات..."><button class="search-btn" type="submit" aria-label="جستجو"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button></form></div></div>
         <div class="container">
             <div class="header-content">
                 <div class="logo">شوفاژ حیدری</div>
@@ -434,107 +408,67 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">خانه</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">بلاگ و مقالات</li>
+                    <li class="breadcrumb-item"><a href="blog.html">بلاگ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">راهنمای انتخاب پکیج</li>
                 </ol>
             </nav>
         </div>
     </div>
 
-    <!-- محتوای اصلی -->
+    <!-- محتوای مقاله -->
     <div class="container">
-        <!-- هدر بلاگ -->
-        <div class="blog-header">
-            <h1>بلاگ و مقالات تخصصی</h1>
-            <p>راهنماها، مقالات آموزشی و آخرین اخبار دنیای تاسیسات ساختمان</p>
-        </div>
-
-        <!-- بخش جستجو -->
-        <div class="search-section">
-            <div class="search-row">
-                <input id="q" type="text" placeholder="جستجو در مقالات، راهنماها و اخبار...">
-                <button class="read-btn" onclick="searchArticles()">جستجو</button>
+        <div class="article-container">
+            <!-- هدر مقاله -->
+            <div class="article-header">
+                <h1>راهنمای انتخاب پکیج دیواری برای آپارتمان</h1>
+                <div class="article-meta">
+                    <span>📅 ۱۴۰۳/۰۸/۲۳</span>
+                    <span>✍️ نویسنده: شوفاژ حیدری</span>
+                    <span>👁️ ۱۲۳۴ بازدید</span>
+                </div>
             </div>
-        </div>
 
-        <!-- گرید مقالات -->
-        <div class="post-grid">
-            <article class="post-card">
-                <div class="post-thumbnail">📝</div>
-                <div class="post-content">
-                    <h3>راهنمای انتخاب پکیج دیواری برای آپارتمان</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۸/۲۳</span>
-                        <span>⏱️ ۵ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">در این مقاله نکات مهم انتخاب پکیج دیواری مناسب برای متراژهای مختلف و انواع ساختمان را بررسی می‌کنیم. از تعیین ظرفیت حرارتی تا انتخاب برند مناسب...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
+            <!-- تصویر شاخص -->
+            <div class="hero-image"></div>
 
-            <article class="post-card">
-                <div class="post-thumbnail">🔧</div>
-                <div class="post-content">
-                    <h3>نگهداری رادیاتور: ۵ گام ساده</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۷/۱۲</span>
-                        <span>⏱️ ۳ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">برای افزایش عمر و بهینه‌سازی عملکرد رادیاتورها لازم است چند کار دوره‌ای انجام دهید. از تخلیه هوا گرفته تا شستشوی سیستم...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
+            <!-- محتوای اصلی مقاله -->
+            <div class="article-content">
+                <p><strong>مقدمه:</strong> انتخاب پکیج مناسب می‌تواند تاثیر زیادی روی راحتی و هزینه‌های انرژی شما داشته باشد. در این مقاله مراحل و فاکتورهای مهم را جمع‌آوری کرده‌ایم تا بتوانید بهترین تصمیم را برای خانه خود بگیرید.</p>
 
-            <article class="post-card">
-                <div class="post-thumbnail">💡</div>
-                <div class="post-content">
-                    <h3>تفاوت مبدل تک و دو مبدل در پکیج‌ها</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۶/۰۵</span>
-                        <span>⏱️ ۴ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">مبدل‌ها نقش کلیدی در عملکرد پکیج‌ها ایفا می‌کنند. با مزایا و معایب هر نوع آشنا شوید و بهترین گزینه را برای خانه خود انتخاب کنید...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
+                <h3>۱- تعیین متراژ و نیاز حرارتی</h3>
+                <p>ابتدا متراژ فضا و میزان عایق‌بندی ساختمان را بررسی کنید. هر متر مربع فضا نیاز به حدود ۷۰ تا ۱۰۰ وات حرارت دارد که این مقدار بسته به شرایط آب و هوایی منطقه و کیفیت عایق‌بندی ساختمان متفاوت است. سپس ظرفیت حرارتی مناسب را محاسبه کنید یا از کارشناسان ما کمک بگیرید.</p>
 
-            <article class="post-card">
-                <div class="post-thumbnail">🌡️</div>
-                <div class="post-content">
-                    <h3>بهترین دمای پکیج برای صرفه‌جویی در مصرف</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۵/۱۸</span>
-                        <span>⏱️ ۴ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">تنظیم صحیح دمای پکیج می‌تواند تا ۳۰٪ در هزینه‌های گاز صرفه‌جویی کند. در این مقاله بهترین دماها را بررسی می‌کنیم...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
+                <h3>۲- انتخاب مبدل مناسب</h3>
+                <p>مبدل تک یا دو مبدل را بر اساس نیاز آب گرم مصرفی و بودجه انتخاب کنید. پکیج‌های دو مبدل دارای کیفیت آب گرم بهتری هستند و برای خانواده‌های بزرگتر مناسب‌تر می‌باشند. همچنین توجه داشته باشید که پکیج‌های فن‌دار عملکرد بهتری در شرایط فشار گاز پایین دارند.</p>
 
-            <article class="post-card">
-                <div class="post-thumbnail">🏠</div>
-                <div class="post-content">
-                    <h3>انتخاب شیرآلات مناسب برای حمام و آشپزخانه</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۴/۲۲</span>
-                        <span>⏱️ ۶ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">شیرآلات نقش مهمی در زیبایی و کاربرد فضاهای حمام و آشپزخانه دارند. راهنمای انتخاب بهترین برندها و مدل‌ها...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
+                <h3>۳- نکات نصب و نگهداری</h3>
+                <p>نصب صحیح توسط تکنسین مجرب و سرویس دوره‌ای باعث افزایش عمر دستگاه و کاهش خطاها می‌شود. توصیه می‌شود سالی یک بار قبل از شروع فصل سرما، پکیج خود را سرویس کنید تا از عملکرد بهینه آن اطمینان حاصل کنید.</p>
 
-            <article class="post-card">
-                <div class="post-thumbnail">⚙️</div>
-                <div class="post-content">
-                    <h3>خرابی‌های رایج پکیج و راه حل آن‌ها</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۳/۱۰</span>
-                        <span>⏱️ ۷ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">آشنایی با خرابی‌های رایج پکیج‌های شوفاژ و روش‌های عیب‌یابی اولیه که می‌توانید خودتان انجام دهید...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
+                <h3>۴- برندهای معتبر و قیمت</h3>
+                <p>برندهای معتبر مانند ایران رادیاتور، بوتان و ایساتیس با گارانتی معتبر و قطعات یدکی اصل، گزینه‌های مناسبی برای خرید هستند. قیمت پکیج‌ها از ۲۰ میلیون تومان تا ۴۰ میلیون تومان متغیر است که باید متناسب با بودجه و نیاز خود انتخاب کنید.</p>
+
+                <h3>۵- مصرف انرژی و کلاس انرژی</h3>
+                <p>توجه به برچسب انرژی و انتخاب پکیج‌های با کلاس انرژی A یا A+ می‌تواند در بلندمدت صرفه‌جویی قابل توجهی در هزینه‌های گاز شما ایجاد کند. پکیج‌های کندانسینگ نیز با راندمان بالاتر از ۹۰ درصد، انتخاب عالی برای کاهش مصرف سوخت هستند.</p>
+            </div>
+
+            <!-- مقالات مرتبط -->
+            <div class="related-articles">
+                <h3>مقالات مرتبط</h3>
+                <div class="related-grid">
+                    <a href="#" class="related-card">
+                        <h4>نحوه سرویس و نگهداری پکیج</h4>
+                        <p>راهنمای کامل سرویس دوره‌ای و نگهداری صحیح از پکیج شوفاژ</p>
+                    </a>
+                    <a href="#" class="related-card">
+                        <h4>مقایسه انواع رادیاتورها</h4>
+                        <p>بررسی تفاوت‌های رادیاتور پنلی، آلومینیومی و چدنی</p>
+                    </a>
+                    <a href="blog.html" class="related-card">
+                        <h4>بازگشت به لیست مقالات</h4>
+                        <p>مشاهده همه مقالات و راهنماهای تخصصی</p>
+                    </a>
                 </div>
-            </article>
+            </div>
         </div>
     </div>
 
@@ -571,20 +505,6 @@
         </div>
     </footer>
 
-    <script>
-        function searchArticles() {
-            const q = document.getElementById('q').value.trim();
-            if(q) {
-                window.location.href = 'search.html?q=' + encodeURIComponent(q);
-            }
-        }
-
-        document.getElementById('q')?.addEventListener('keydown', function(e){
-            if(e.key === 'Enter'){ 
-                searchArticles();
-            }
-        });
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

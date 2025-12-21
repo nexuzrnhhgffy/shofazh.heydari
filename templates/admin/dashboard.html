@@ -1,0 +1,46 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div class="card p-3">
+      <h6 class="mb-1">تعداد محصولات</h6>
+      <h3>{{ product_count }}</h3>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div class="card p-3">
+      <h6 class="mb-1">تعداد واریانت‌ها</h6>
+      <h3>{{ variant_count }}</h3>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div class="card p-3">
+      <h6 class="mb-1">تعداد سفارشات</h6>
+      <h3>{{ order_count }}</h3>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div class="card p-3">
+      <h6 class="mb-1">هشدارهای موجودی</h6>
+      <h3>{{ low_stock | length }}</h3>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card p-3">
+      <h5>سفارشات اخیر</h5>
+      {% if recent_orders %}
+        <ul class="list-group list-group-flush">
+          {% for o in recent_orders %}
+            <li class="list-group-item">سفارش {{ o.order_number }} - مبلغ: {{ o.total_amount }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>هنوز سفارشی وجود ندارد.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

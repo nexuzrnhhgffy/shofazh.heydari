@@ -1,0 +1,189 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h4>{% if product %}ویرایش محصول: {{ product.product_name }}{% else %}افزودن محصول جدید{% endif %}</h4>
+<form id="productForm" method="POST" enctype="multipart/form-data">
+  <ul class="nav nav-tabs mt-3" id="productFormTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1" type="button" role="tab">اطلاعات پایه</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button" role="tab">مشخصات</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="step3-tab" data-bs-toggle="tab" data-bs-target="#step3" type="button" role="tab">واریانت‌ها</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="step4-tab" data-bs-toggle="tab" data-bs-target="#step4" type="button" role="tab">بازبینی و ذخیره</button>
+    </li>
+  </ul>
+  <div class="tab-content border p-3" id="productFormContent">
+    <!-- Step 1 -->
+    <div class="tab-pane fade show active" id="step1" role="tabpanel">
+      <div class="mb-3">
+        <label class="form-label">نام محصول</label>
+        <input name="product_name" id="product_name" class="form-control" required value="{{ product.product_name if product }}">
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">برند</label>
+          <select name="brand_id" class="form-select">
+            <option value="">--- انتخاب برند ---</option>
+            {% for b in brands %}
+              <option value="{{ b.brand_id }}" {% if product and product.brand_id==b.brand_id %}selected{% endif %}>{{ b.brand_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">دسته</label>
+          <select name="category_id" class="form-select" required>
+            <option value="">--- انتخاب دسته ---</option>
+            {% for c in categories %}
+              <option value="{{ c.category_id }}" {% if product and product.category_id==c.category_id %}selected{% endif %}>{{ c.category_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">وضعیت</label>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if not product or product.is_active %}checked{% endif %}>
+            <label class="form-check-label" for="is_active">فعال</label>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">توضیحات</label>
+        <textarea name="description" class="form-control" rows="4">{{ product.description if product }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">تصویر محصول</label>
+        <input type="file" name="image" class="form-control" onchange="previewImage(this)">
+        {% if product and product.image_url %}
+          <div class="mt-2"><img src="/{{ product.image_url }}" alt="تصویر" style="max-width:200px"></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Step 2: Attributes -->
+    <div class="tab-pane fade" id="step2" role="tabpanel">
+      <div id="attributesContainer">
+        {% if product and product.attributes %}
+          {% for pa in product.attributes %}
+            <div class="row attribute-row mb-2">
+              <div class="col-md-5">
+                <select name="attribute_id" class="form-select">
+                  <option value="">--- انتخاب مشخصه ---</option>
+                  {% for a in attributes %}
+                    <option value="{{ a.attribute_id }}" {% if a.attribute_id==pa.attribute.attribute_id %}selected{% endif %}>{{ a.attribute_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-5">
+                <input name="attribute_value" class="form-control" value="{{ pa.value }}" placeholder="مقدار">
+              </div>
+              <div class="col-md-2"><button type="button" class="btn btn-danger" onclick="removeAttributeRow(this)">حذف</button></div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <!-- template: start empty -->
+        {% endif %}
+      </div>
+      <button type="button" class="btn btn-outline-primary mt-2" onclick="addAttributeRow()">+ افزودن مشخصه</button>
+    </div>
+
+    <!-- Step 3: Variants -->
+    <div class="tab-pane fade" id="step3" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="variantsTable">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>اندازه</th>
+              <th>واحد</th>
+              <th>قیمت عمده</th>
+              <th>قیمت خرده</th>
+              <th>موجودی</th>
+              <th>پیش‌فرض</th>
+              <th>عملیات</th>
+            </tr>
+          </thead>
+          <tbody id="variantsContainer">
+            {% if product and product.variants %}
+              {% for v in product.variants %}
+                <tr>
+                  <td><input name="variant_sku" class="form-control" value="{{ v.sku }}"></td>
+                  <td><input name="variant_size" class="form-control" value="{{ v.size_value }}"></td>
+                  <td>
+                    <select name="variant_unit" class="form-select">
+                      <option value="cm" {% if v.size_unit=='cm' %}selected{% endif %}>سانتی‌متر</option>
+                      <option value="mm" {% if v.size_unit=='mm' %}selected{% endif %}>میلیمتر</option>
+                      <option value="unit" {% if v.size_unit=='unit' %}selected{% endif %}>واحد</option>
+                    </select>
+                  </td>
+                  <td><input name="variant_wholesale" class="form-control" value="{{ v.wholesale_price }}"></td>
+                  <td><input name="variant_retail" class="form-control" value="{{ v.retail_price }}"></td>
+                  <td><input name="variant_stock" class="form-control" value="{{ v.stock_quantity }}"></td>
+                  <td><input type="radio" name="variant_default_selected" value="{{ v.sku }}" {% if v.is_default %}checked{% endif %}></td>
+                  <td><button type="button" class="btn btn-danger" onclick="removeVariantRow(this)">حذف</button></td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-outline-primary" onclick="addVariantRow()">+ افزودن واریانت</button>
+    </div>
+
+    <!-- Step 4: Review & Save -->
+    <div class="tab-pane fade" id="step4" role="tabpanel">
+      <h5>پیش‌نمایش</h5>
+      <div id="reviewSummary" class="mb-3"></div>
+      <button type="submit" class="btn btn-success">ذخیره محصول</button>
+    </div>
+  </div>
+</form>
+
+<!-- Templates used by JS -->
+<template id="attributeRowTemplate">
+  <div class="row attribute-row mb-2">
+    <div class="col-md-5">
+      <select name="attribute_id" class="form-select">
+        <option value="">--- انتخاب مشخصه ---</option>
+        {% for a in attributes %}
+          <option value="{{ a.attribute_id }}">{{ a.attribute_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-5">
+      <input name="attribute_value" class="form-control" placeholder="مقدار">
+    </div>
+    <div class="col-md-2"><button type="button" class="btn btn-danger" onclick="removeAttributeRow(this)">حذف</button></div>
+  </div>
+</template>
+
+<template id="variantRowTemplate">
+  <tr>
+    <td><input name="variant_sku" class="form-control"></td>
+    <td><input name="variant_size" class="form-control" oninput="updateSKUHint(this)"></td>
+    <td>
+      <select name="variant_unit" class="form-select">
+        <option value="cm">سانتی‌متر</option>
+        <option value="mm">میلیمتر</option>
+        <option value="unit">واحد</option>
+      </select>
+    </td>
+    <td><input name="variant_wholesale" class="form-control"></td>
+    <td><input name="variant_retail" class="form-control"></td>
+    <td><input name="variant_stock" class="form-control" value="0"></td>
+    <td><input type="radio" name="variant_default_selected" value=""></td>
+    <td><button type="button" class="btn btn-danger" onclick="removeVariantRow(this)">حذف</button></td>
+  </tr>
+</template>
+
+<script>
+// initialize preview and hooks
+document.addEventListener('DOMContentLoaded', function(){
+  updatePreview();
+});
+</script>
+
+{% endblock %}

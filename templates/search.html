@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}فروشگاه تاسیسات حیدری - صفحه اصلی{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+{% endblock %}
+
+{% block content %}
+ 
+
+  <div class="container pt-5">  
+   
+
+    <div class="row g-4 mt-2">
+      <!-- Filters column (right side in RTL) -->
+      <aside class="col-12 col-md-3">
+        <div class="card sticky-top" style="top:18px">
+          <div class="card-body">
+            <h6 class="card-title">فیلترها</h6>
+
+            <div class="mb-3">
+               <div class="search-box">
+      <form method="GET" action="{{ url_for('search') }}" class="d-flex w-100">
+        <input id="q" name="q" value="{{ q }}" class="form-control" placeholder="متن جستجو را وارد کنید...">
+        <button class="btn btn-warning ms-2">جستجو</button>
+      </form>
+    </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">دسته‌بندی</label>
+              {% for c in categories %}
+                <div class="form-check">
+                  <input class="form-check-input filter-category" type="checkbox" value="{{ c.category_name }}" id="cat{{ c.category_id }}" {% if request.args.get('category_id')==c.category_id|string %}checked{% endif %}>
+                  <label class="form-check-label" for="cat{{ c.category_id }}">{{ c.category_name }}</label>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">قیمت (حداقل - حداکثر)</label>
+              <div class="d-flex gap-2">
+                <input type="number" id="price-min" class="form-control form-control-sm" placeholder="از">
+                <input type="number" id="price-max" class="form-control form-control-sm" placeholder="تا">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">برند</label>
+              {% for b in brands %}
+              <div class="form-check">
+                <input class="form-check-input filter-brand" type="checkbox" value="{{ b.brand_name }}" id="b{{ b.brand_id }}" {% if request.args.get('brand_id')==b.brand_id|string %}checked{% endif %}>
+                <label class="form-check-label" for="b{{ b.brand_id }}">{{ b.brand_name }}</label>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="d-grid">
+              <button id="apply-filters" class="btn btn-primary btn-sm">اعمال فیلترها</button>
+              <button id="clear-filters" class="btn btn-link btn-sm text-decoration-none">پاک کردن</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Results column (left side in RTL) -->
+      <main class="col-12 col-md-9">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <div class="small text-muted">نمایش <span id="results-count">{{ total }}</span> مورد</div>
+          <div class="d-flex align-items-center">
+            <label class="me-2 mb-0">مرتب‌سازی:</label>
+            <select id="sort-by" class="form-select form-select-sm">
+              <option value="relevance">مرتبط‌ترین</option>
+              <option value="price-asc">قیمت: کم به زیاد</option>
+              <option value="price-desc">قیمت: زیاد به کم</option>
+              <option value="newest">جدیدترین</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="results" class="row row-cols-1 row-cols-md-2 g-3">
+          {% if products %}
+            {% for p in products %}
+              <div class="col">
+                <div class="card result h-100">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-auto p-3">
+                      {% if p.image_url %}
+                        <img src="/{{ p.image_url }}" class="img-fluid rounded" alt="{{ p.product_name }}">
+                      {% else %}
+                        <img src="https://via.placeholder.com/120x80?text=img" class="img-fluid rounded" alt="">
+                      {% endif %}
+                    </div>
+                    <div class="col">
+                      <div class="card-body py-2">
+                        <h5 class="card-title mb-1"><a href="{{ url_for('product_detail', slug=p.slug) }}">{{ p.product_name }}</a></h5>
+                        <p class="card-text small text-muted mb-1">{{ p.description[:120] }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="badge bg-secondary">{{ p.category.category_name if p.category else '' }}</div>
+                          <div class="fw-bold text-primary">{{ (p.variants|length and p.variants[0].retail_price|currency) or 'قیمت ندارد' }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="alert alert-light">هیچ نتیجه‌ای یافت نشد.</div>
+          {% endif %}
+        </div>
+
+        <nav class="mt-3" aria-label="نتایج">
+          <ul id="pager" class="pagination justify-content-center"></ul>
+        </nav>
+      </main>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+
+
+<script>
+  // Prefill query input and wire filters
+  (function(){
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    if(q && document.getElementById('q')) document.getElementById('q').value = decodeURIComponent(q);
+  })();
+
+  document.getElementById('apply-filters').addEventListener('click', function(e){
+    e.preventDefault();
+    const q = document.getElementById('q') ? document.getElementById('q').value.trim() : '';
+    const cat = document.querySelector('.filter-category:checked');
+    const brand = document.querySelector('.filter-brand:checked');
+    const url = new URL(location.origin + '{{ url_for("search") }}');
+    if (q) url.searchParams.set('q', q);
+    if (cat) url.searchParams.set('category_id', cat.id.replace('cat',''));
+    if (brand) url.searchParams.set('brand_id', brand.id.replace('b',''));
+    location.href = url.toString();
+  });
+
+  document.getElementById('clear-filters').addEventListener('click', function(e){
+    e.preventDefault();
+    location.href = '{{ url_for("search") }}';
+  });
+  </script>
+ 
+
+    {% endblock %}

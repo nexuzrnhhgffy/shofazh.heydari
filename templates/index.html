@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}فروشگاه تاسیسات حیدری - صفحه اصلی{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-slider">
+        <div class="slide-content">
+            <h2>تاسیسات ساختمان با بهترین قیمت</h2>
+            <p>پکیج ایران رادیاتور • بوتان • شیرآلات قهرمان • لوله پنج لایه • رادیاتور پنلی</p>
+            <button class="btn">همین حالا خرید کنید</button>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/709/709790.png" alt="ارسال">
+                    </div>
+                    <h3>ارسال سریع</h3>
+                    <p>ارسال رایگان تهران و کرج</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1828/1828640.png" alt="ضمانت">
+                    </div>
+                    <h3>ضمانت اصالت</h3>
+                    <p>تمامی کالاها با فاکتور رسمی</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/2377/2377993.png" alt="نصب">
+                    </div>
+                    <h3>نصب توسط تیم حرفه‌ای</h3>
+                    <p>خدمات پس از فروش</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/2706/2706962.png" alt="پشتیبانی">
+                    </div>
+                    <h3>مشاوره رایگان</h3>
+                    <p>تلفنی و حضوری</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">دسته‌بندی محصولات</h2>
+    <div class="category-grid">
+        {% for c in categories %}
+        <div class="category-card">
+            <div class="category-icon">
+                <!-- placeholder icon -->
+                <img src="https://cdn-icons-png.flaticon.com/128/2062/2062614.png" alt="{{ c.category_name }}">
+            </div>
+            <h3><a class="no-decoration" href="{{ url_for('search') }}?category_id={{ c.category_id }}">{{ c.category_name }}</a></h3>
+        </div>
+        {% else %}
+        <div class="category-card">
+            <h3>دسته‌ای یافت نشد</h3>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title">پرفروش‌ترین محصولات</h2>
+    <div class="slider-container">
+        <div class="slider-track">
+            {% for p in featured_products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if p.image_url %}
+                        <img src="/{{ p.image_url }}" alt="{{ p.product_name }}" class="product-card-img">
+                    {% else %}
+                        <img src="https://via.placeholder.com/160?text=img" alt="{{ p.product_name }}">
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <h3><a class="no-decoration" href="{{ url_for('product_detail', slug=p.slug) }}">{{ p.product_name }}</a></h3>
+                    <div class="product-meta">{{ p.brand.brand_name if p.brand else '' }}</div>
+                    {% set price = p.variants[0].retail_price if p.variants|length > 0 else None %}
+                    <div class="price">{{ price|currency }}</div>
+                    <a href="{{ url_for('product_detail', slug=p.slug) }}" class="btn btn-sm btn-outline-primary">مشاهده</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="product-card"><div class="product-info"><h3>هیچ محصولی موجود نیست</h3></div></div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- بلاگ -->
+<h2 class="section-title">بلاگ و مقالات</h2>
+<div class="container">
+    <div class="category-grid">
+        <div class="category-card">
+            <div class="category-icon">
+                <img src="https://cdn-icons-png.flaticon.com/128/2869/2869863.png" alt="مقالات">
+            </div>
+            <h3><a class="no-decoration" href="blog.html">آخرین مقالات و راهنماها</a></h3>
+            <p>راهنمای انتخاب پکیج، نگهداری رادیاتور و مطالب تخصصی تأسیساتی</p>
+        </div>
+
+        <div class="category-card">
+            <div class="category-icon">
+                <img src="https://cdn-icons-png.flaticon.com/128/2921/2921822.png" alt="اخبار">
+            </div>
+            <h3><a class="no-decoration" href="blog.html">اخبار و اطلاعیه‌ها</a></h3>
+            <p>اطلاع‌رسانی تخفیف‌ها و موجودی محصولات</p>
+        </div>
+
+        <div class="category-card">
+            <div class="category-icon">
+                <img src="https://cdn-icons-png.flaticon.com/128/2917/2917995.png" alt="محصولات">
+            </div>
+            <h3><a class="no-decoration" href="product.html">جزئیات محصول نمونه</a></h3>
+            <p>مشاهده صفحه محصول نمونه و مشخصات کامل</p>
+        </div>
+    </div>
+</div>
+
+<div class="intro-video">
+    <!-- Text Column -->
+    <div>
+        <h3>معرفی کوتاه فروشگاه</h3>
+        <p>
+            اینجا می‌توانید متن معرفی فروشگاه خود را قرار دهید. توضیحاتی درباره محصولات و خدمات ارائه دهید تا بازدیدکننده‌ها سریع با فروشگاه آشنا شوند.
+        </p>
+    </div>
+
+    <!-- Video Column -->
+    <div>
+        <div id="58646588322">
+                <!-- embed script loaded from /static/js/aparat-embed.js -->
+            </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/aparat-embed.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

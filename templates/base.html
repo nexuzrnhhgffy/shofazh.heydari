@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}فروشگاه تاسیسات حیدری{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+ 
+
+
+    {% block extra_css %}
+
+    {% endblock %}
+
+</head>
+<body>
+
+    <!-- نوار بالا -->
+    <div class="top-bar">
+        <div class="ticker">
+            <span>تلفن: 021-55661234</span>
+            <span>واتساپ: 09121234567</span>
+            <span>ارسال رایگان تهران و کرج</span>
+            <span>نصب حرفه‌ای پکیج و رادیاتور</span>
+            <span>ضمانت اصالت کالا</span>
+            <span>مشاوره رایگان تأسیسات</span>
+        </div>
+    </div>
+
+    <!-- هدر -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">شوفاژ حیدری</div>
+                
+                <div class="search-bar">
+                    <form method="GET" action="{{ url_for('search') }}">
+                        <input name="q" value="{{ request.args.get('q','') }}" type="text" placeholder="جستجوی پکیج، رادیاتور، شیرآلات...">
+                        <button class="search-btn" type="submit" aria-label="جستجو">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="color-controls" aria-label="تغییر رنگ قالب" title="تغییر رنگ قالب" hidden>
+                    <button class="color-btn orange active" data-main="#d35400" data-main2="#e67e22" aria-label="نارنجی"></button>
+                    <button class="color-btn blue" data-main="#002a68" data-main2="#002a68" aria-label="آبی"></button>
+                    <button class="color-btn green" data-main="#00ac6d" data-main2="#00ac6d" aria-label="سبز"></button>
+                    <button class="color-btn gray" data-main="#292929" data-main2="#292929" aria-label="قرمز"></button>
+                    <button class="color-btn purple" data-main="#00e4c2c7" data-main2="#00e4c2c7" aria-label="بنفش"></button>
+                </div>
+                <div class="header-icons" hidden>
+                    <a href="#">سبد خرید (۰)</a>
+                    <a href="#">ورود / ثبت نام</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- منو Bootstrap -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">صفحه اصلی</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">محصولات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">پکیج و آبگرمکن</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">رادیاتور</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">شیرآلات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">لوله و اتصالات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- محتوا -->
+    {% block content %}{% endblock %}
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>فروشگاه تاسیسات حیدری</h3>
+                    <p>تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت</p>
+                </div>
+                <div class="footer-section">
+                    <h3>لینک‌های سریع</h3>
+                    <a href="#">صفحه اصلی</a>
+                    <a href="#">پکیج</a>
+                    <a href="#">رادیاتور</a>
+                    <a href="#">شیرآلات</a>
+                </div>
+                <div class="footer-section">
+                    <h3>خدمات</h3>
+                    <a href="#">نصب و راه‌اندازی</a>
+                    <a href="#">خدمات پس از فروش</a>
+                    <a href="#">مشاوره رایگان</a>
+                </div>
+                <div class="footer-section">
+                    <h3>تماس با ما</h3>
+                    <p>تلفن: 021-55661234</p>
+                    <p>موبایل: 09121234567</p>
+                    <p>آدرس: تهران - خیابان انقلاب</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © ۱۴۰۴ فروشگاه تاسیسات حیدری - تمامی حقوق محفوظ است
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,95 @@
+/* Index / Home specific styles */
+/* هیرو */
+.hero-slider {
+    height:440px;
+    background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+                url('3956d427-0f93-403c-9f94-cc4f8d5351ce.jpg') center/cover no-repeat;
+    border-radius:15px;
+    margin:30px auto;
+    position:relative;
+    overflow:hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:#fff;
+    background-size: 100% 100%;
+    background-position: center;
+    will-change: background-size, background-position;
+    animation: heroZoom 20s ease-in-out infinite;
+}
+@keyframes heroZoom {
+    0% {
+        background-size: 100% 100%;
+        background-position: 50% 40%;
+    }
+    50% {
+        background-size: 125% 125%;
+        background-position: 50% 60%;
+    }
+    100% {
+        background-size: 100% 100%;
+        background-position: 50% 40%;
+    }
+}
+.slide-content {
+    color:#fff;
+    max-width:600px;
+    text-align:center;
+    padding: 20px;
+}
+.slide-content h2 {
+    font-size:44px;
+    margin-bottom:20px;
+}
+.slide-content p {
+    font-size:19px;
+    margin-bottom:30px;
+}
+.btn {
+    background:#fff;
+    color:var(--main);
+    padding:14px 35px;
+    border:none;
+    border-radius:30px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+.btn:hover {
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Intro video card layout */
+.intro-video{
+    max-width:1000px;
+    margin:26px auto;
+    padding:18px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.06);
+    text-align:center;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    align-items:center;
+}
+.intro-video video{width:100%;height:auto;border-radius:10px}
+.intro-video h3{margin-bottom:12px;color:#222}
+.intro-video p{margin:0;color:var(--muted)}
+
+/* Feature icons */
+.feature-icon img{width:52px;height:52px}
+.category-icon img{width:55px;height:55px}
+
+/* Links, utility classes */
+.no-decoration{ text-decoration:none; color:inherit }
+.category-card p{ margin-top:12px; color:var(--muted) }
+.product-card-img{ max-width:100%; height:100%; object-fit:cover }
+
+@media (max-width:768px) {
+    .slide-content h2 {font-size:32px;}
+    .slide-content p {font-size:16px;}
+    .hero-slider {height:350px;}
+    .intro-video { grid-template-columns: 1fr; }
+}
