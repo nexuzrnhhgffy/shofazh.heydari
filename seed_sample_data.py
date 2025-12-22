@@ -20,7 +20,8 @@ from app import app
 from extensions import db
 from models import (
     Vendor, Brand, Category, Attribute,
-    Product, ProductVariant, ProductAttribute
+    Product, ProductVariant, ProductAttribute,
+    ArticleCategory
 )
 
 
@@ -208,6 +209,85 @@ def seed():
         # Final commit for everything else
         session.commit()
         print("✅ Sample data seeded successfully! Everything is in the database now.")
+
+        # ==================== Article Categories ====================
+        print("🌱 Seeding Article Categories...")
+        # والد اول: آخرین مقالات و راهنماها
+        guides_parent = get_or_create(
+            session,
+            ArticleCategory,
+            slug="latest-articles-guides",
+            defaults={
+                "name": "آخرین مقالات و راهنماها",
+                "description": "مجموعه مقالات آموزشی، راهنمای خرید و نگهداری تجهیزات گرمایشی",
+                "is_active": True,
+                "sort_order": 10
+            }
+        )
+        # فرزند آن
+        get_or_create(
+            session,
+            ArticleCategory,
+            slug="package-selection-maintenance",
+            defaults={
+                "name": "راهنمای انتخاب پکیج، نگهداری رادیاتور و مطالب تخصصی تأسیساتی",
+                "description": "راهنماهای جامع خرید پکیج، نگهداری رادیاتور و نکات فنی تأسیسات",
+                "parent_id": guides_parent.category_id,
+                "is_active": True,
+                "sort_order": 1
+            }
+        )
+        # والد دوم: اخبار و اطلاعیه‌ها
+        news_parent = get_or_create(
+            session,
+            ArticleCategory,
+            slug="news-announcements",
+            defaults={
+                "name": "اخبار و اطلاعیه‌ها",
+                "description": "آخرین اخبار صنعت گرمایش، به‌روزرسانی محصولات و اطلاعیه‌های فروشگاه",
+                "is_active": True,
+                "sort_order": 20
+            }
+        )
+        # فرزند آن
+        get_or_create(
+            session,
+            ArticleCategory,
+            slug="discounts-stock-updates",
+            defaults={
+                "name": "اطلاع‌رسانی تخفیف‌ها و موجودی محصولات",
+                "description": "اعلام تخفیف‌های ویژه، موجود شدن مجدد محصولات و پیشنهادات محدود",
+                "parent_id": news_parent.category_id,
+                "is_active": True,
+                "sort_order": 1
+            }
+        )
+        # والد سوم: جزئیات محصول نمونه
+        product_details_parent = get_or_create(
+            session,
+            ArticleCategory,
+            slug="sample-product-details",
+            defaults={
+                "name": "جزئیات محصول نمونه",
+                "description": "بررسی کامل و مشخصات فنی یک محصول نمونه به عنوان الگو",
+                "is_active": True,
+                "sort_order": 30
+            }
+        )
+        # فرزند آن
+        get_or_create(
+            session,
+            ArticleCategory,
+            slug="sample-product-full-specs",
+            defaults={
+                "name": "مشاهده صفحه محصول نمونه و مشخصات کامل",
+                "description": "نمایش کامل مشخصات، تصاویر، ویژگی‌ها و نظرات یک محصول نمونه",
+                "parent_id": product_details_parent.category_id,
+                "is_active": True,
+                "sort_order": 1
+            }
+        )
+        print("✓ Article categories seeded successfully with hierarchy")
 
 
 if __name__ == "__main__":

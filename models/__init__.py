@@ -9,6 +9,10 @@ from .models import (
     Customer,
     Order,
     OrderItem,
+    ArticleCategory,
+    Article,
+    ArticleComment,
+    ArticleImage,
 )
 
 __all__ = [
@@ -22,4 +26,8 @@ __all__ = [
     "Customer",
     "Order",
     "OrderItem",
+    "ArticleCategory",
+    "Article",
+    "ArticleComment",
+    "ArticleImage",
 ]

@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request
 
 from extensions import db
-from models import Product, Category, Brand
+from models import Product, Category, Brand,ArticleCategory
 
 app = Flask(__name__)
 app.config.setdefault("UPLOAD_FOLDER", "static/uploads")
@@ -38,7 +38,13 @@ except Exception:
 def index():
     categories = Category.query.filter_by(parent_id=None).order_by(Category.category_name).all()
     featured_products = Product.query.filter_by(is_active=True).order_by(Product.created_at.desc()).limit(8).all()
-    return render_template('index.html', categories=categories, featured_products=featured_products)
+    article_categories = ArticleCategory.query.filter_by(
+        parent_id=None,
+        is_active=True
+    ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
+    return render_template('index.html', categories=categories, featured_products=featured_products, article_categories=article_categories)
+
+ 
 
 
 @app.route('/product/<slug>')
@@ -52,37 +58,48 @@ def product_detail(slug):
         default_variant = next((v for v in variants if v.is_default), variants[0])
         default_price = default_variant.retail_price
     return render_template('product.html', product=product, variants=variants, attributes=attributes, related=related, default_price=default_price)
+ 
+@app.route('/blog/<slug>')
+def blog_detail(slug):
+    article = Article.query.filter_by(slug=slug, is_active=True).first_or_404()
+    
+    # افزایش تعداد بازدید
+    article.view_count += 1
+    db.session.commit()
+    
+    # مقالات مرتبط: از همان دسته، غیر از خودش، فعال، محدود به ۳ تا
+    related_articles = Article.query.filter(
+        Article.category_id == article.category_id,
+        Article.id != article.id,
+        Article.is_active == True
+    ).order_by(Article.created_at.desc()).limit(3).all()
+    
+    return render_template(
+        'blog-detail.html',
+        article=article,
+        related_articles=related_articles
+    )
 
-
-@app.route('/search')
-def search():
-    q = request.args.get('q', '').strip()
-    page = int(request.args.get('page', 1))
+# اگر صفحه لیست مقالات ندارید، می‌توانید این روت را هم اضافه کنید
+@app.route('/blog')
+def blog_list():
+    page = request.args.get('page', 1, type=int)
     per_page = 12
-    category_id = request.args.get('category_id')
-    brand_id = request.args.get('brand_id')
+    articles = Article.query.filter_by(is_active=True)\
+        .order_by(Article.created_at.desc())\
+        .paginate(page=page, per_page=per_page, error_out=False)
+    
+    article_categories = ArticleCategory.query.filter_by(
+        parent_id=None,
+        is_active=True
+    ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
+    
+    return render_template(
+        'blog.html',
+        articles=articles,
+        article_categories=article_categories
+    )
 
-    query = Product.query.filter(Product.is_active == True)
-    if q:
-        query = query.filter(Product.product_name.contains(q) | Product.description.contains(q))
-    if category_id:
-        try:
-            cid = int(category_id)
-            query = query.filter(Product.category_id == cid)
-        except ValueError:
-            pass
-    if brand_id:
-        try:
-            bid = int(brand_id)
-            query = query.filter(Product.brand_id == bid)
-        except ValueError:
-            pass
-
-    total = query.count()
-    products = query.order_by(Product.created_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
-    categories = Category.query.order_by(Category.category_name).all()
-    brands = Brand.query.order_by(Brand.brand_name).all()
-    return render_template('search.html', q=q, products=products, total=total, categories=categories, brands=brands)
 
 
 @app.route('/products')
@@ -92,6 +109,51 @@ def products():
     query = Product.query.filter(Product.is_active == True)
     products = query.order_by(Product.created_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
     return render_template('products.html', products=products)
+
+
+
+
+@app.route('/contact')
+def contact(): 
+    return render_template('contact.html')
+
+
+
+
+
+
+@app.route('/search')
+def search():
+    query = request.args.get('q', '').strip()
+    
+    if not query:
+        return render_template('search.html', query='', products=[], articles=[])
+    
+    # جستجو در محصولات (نام، توضیحات، برند، دسته)
+    products = Product.query.filter(
+        Product.is_active == True,
+        (
+            Product.product_name.ilike(f'%{query}%') |
+            Product.description.ilike(f'%{query}%') |
+            Product.brand.has(Brand.brand_name.ilike(f'%{query}%'))
+        )
+    ).order_by(Product.created_at.desc()).limit(20).all()
+    
+    # جستجو در مقالات (عنوان و محتوا)
+    articles = Article.query.filter(
+        Article.is_active == True,
+        (
+            Article.title.ilike(f'%{query}%') |
+            Article.content.ilike(f'%{query}%')
+        )
+    ).order_by(Article.created_at.desc()).limit(10).all()
+    
+    return render_template(
+        'search.html',
+        query=query,
+        products=products,
+        articles=articles
+    )
 
 
 if __name__ == '__main__':

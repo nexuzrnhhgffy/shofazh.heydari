@@ -96,35 +96,24 @@
 
 </div>
 
-<!-- بلاگ -->
+
 <h2 class="section-title">بلاگ و مقالات</h2>
 <div class="container">
     <div class="category-grid">
+        {% for cat in article_categories %}
         <div class="category-card">
             <div class="category-icon">
-                <img src="https://cdn-icons-png.flaticon.com/128/2869/2869863.png" alt="مقالات">
+                <!-- آیکن را می‌توانید در مدل ArticleCategory فیلد icon_url اضافه کنید، یا بر اساس slug انتخاب کنید -->
+                <img src="{{ cat.icon_url|default('https://cdn-icons-png.flaticon.com/128/2869/2869863.png') }}" alt="{{ cat.name }}">
             </div>
-            <h3><a class="no-decoration" href="blog.html">آخرین مقالات و راهنماها</a></h3>
-            <p>راهنمای انتخاب پکیج، نگهداری رادیاتور و مطالب تخصصی تأسیساتی</p>
+            <h3><a class="no-decoration" href="{{ url_for('blog_category', category_id=cat.id) }}"> {{ cat.name }} </a></h3>
+            <p>{{ cat.description|default('مطالب مرتبط با ' + cat.name) }}</p>
         </div>
-
-        <div class="category-card">
-            <div class="category-icon">
-                <img src="https://cdn-icons-png.flaticon.com/128/2921/2921822.png" alt="اخبار">
-            </div>
-            <h3><a class="no-decoration" href="blog.html">اخبار و اطلاعیه‌ها</a></h3>
-            <p>اطلاع‌رسانی تخفیف‌ها و موجودی محصولات</p>
-        </div>
-
-        <div class="category-card">
-            <div class="category-icon">
-                <img src="https://cdn-icons-png.flaticon.com/128/2917/2917995.png" alt="محصولات">
-            </div>
-            <h3><a class="no-decoration" href="product.html">جزئیات محصول نمونه</a></h3>
-            <p>مشاهده صفحه محصول نمونه و مشخصات کامل</p>
-        </div>
+        {% endfor %}
+         
     </div>
 </div>
+
 
 <div class="intro-video">
     <!-- Text Column -->

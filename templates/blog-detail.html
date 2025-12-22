@@ -1,510 +1,162 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>راهنمای انتخاب پکیج - شوفاژ حیدری</title>
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <style>
-        :root{
-            --main: #d35400;
-            --main-2: #e67e22;
-            --bg: #f5f5f5;
-            --dark: #1a1a1a;
-            --muted: #777;
-        }
-        * {margin:0;padding:0;box-sizing:border-box;}
-        body {
-            font-family: 'Vazir', Tahoma, sans-serif;
-            direction: rtl;
-            background:var(--bg);
-            line-height: 1.6;
-        }
+{% extends "base.html" %}
 
-        /* نوار بالا */
-        .top-bar {
-            background:var(--dark);color:#fff;padding:8px 0;font-size:14px;
-            overflow:hidden;white-space:nowrap;
-        }
-        .top-bar .ticker {
-            display:inline-block;
-            animation: scrollLeft 25s linear infinite;
-        }
-        .top-bar span {margin-left:40px;}
-        @keyframes scrollLeft {
-            0% {transform:translateX(100%);}
-            100% {transform:translateX(-100%);}
-        }
+{% block title %}{{ article.title }} - فروشگاه تاسیسات حیدری{% endblock %}
 
-        /* هدر با پس‌زمینه */
-        .main-header {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('image.png') center/cover;
-            background-attachment: fixed;
-            padding: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .header-content {
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .logo {
-            font-size:32px;
-            font-weight:bold;
-            color:#fff;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-        }
-        .search-bar {
-            flex:1;
-            max-width:500px;
-            min-width: 250px;
-            position: relative;
-        }
-        .search-bar input {
-            width:100%;
-            padding:12px 55px 12px 20px;
-            border:2px solid rgba(255,255,255,0.3);
-            background:rgba(255,255,255,0.2);
-            color:#fff;
-            border-radius:30px;
-            outline:none;
-            font-size:15px;
-        }
-        .search-bar input::placeholder {color:rgba(255,255,255,0.9);}
-        .search-btn {
-            position: absolute;
-            left: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--main);
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .search-btn:hover {
-            background: var(--main-2);
-            transform: translateY(-50%) scale(1.05);
-        }
-        .search-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #fff;
-        }
-        .header-icons a {
-            margin-left:20px;
-            color:#fff;
-            text-decoration:none;
-            font-size:14px;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
-        }
+{% block extra_css %}
+<style>
+    .article-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .article-header {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    .article-header h1 {
+        font-size: 32px;
+        color: #222;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+    .article-meta {
+        color: #888;
+        font-size: 14px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    .article-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .hero-image {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                    url('{{ article.featured_image | default('https://via.placeholder.com/1000x400?text=مقاله') }}') center/cover no-repeat;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
+    .article-content {
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+        line-height: 1.9;
+        font-size: 16px;
+        color: #333;
+    }
+    .article-content h3 {
+        font-size: 22px;
+        color: #222;
+        margin: 30px 0 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--main);
+    }
+    .article-content strong {
+        color: var(--main);
+    }
+    .related-articles {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        margin-bottom: 50px;
+    }
+    .related-articles h3 {
+        font-size: 22px;
+        margin-bottom: 20px;
+        color: #222;
+    }
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .related-card {
+        background: #f8f8f8;
+        padding: 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #333;
+        transition: .3s;
+        border: 2px solid transparent;
+    }
+    .related-card:hover {
+        border-color: var(--main);
+        transform: translateY(-3px);
+    }
+    .related-card h4 {
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: var(--main);
+    }
+    .related-card p {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+    }
+</style>
+{% endblock %}
 
-        /* منو با Bootstrap */
-        nav.navbar {
-            background:var(--main) !important;
-            padding: 0 !important;
-            box-shadow:0 4px 10px rgba(0,0,0,0.15);
-        }
-        .navbar-toggler {
-            border: 2px solid rgba(255,255,255,0.7);
-            padding: 6px 10px;
-        }
-        .navbar-toggler:focus {
-            box-shadow: none;
-        }
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-            width: 28px;
-            height: 28px;
-        }
-        .navbar-nav {
-            gap: 5px;
-        }
-        .nav-link {
-            color:#fff !important;
-            font-weight:600;
-            padding: 15px 20px !important;
-            transition: all 0.3s;
-            position: relative;
-        }
-        .nav-link:hover {
-            background: rgba(255,255,255,0.1);
-            border-radius: 5px;
-        }
-
-        /* موبایل */
-        @media (max-width:991px) {
-            .navbar-collapse {
-                background: #d35400;
-                padding: 10px 0;
-                margin-top: 10px;
-                border-radius: 8px;
-            }
-            .nav-link {
-                border-bottom: 1px solid rgba(255,255,255,0.2);
-                padding: 12px 20px !important;
-            }
-            .nav-item:last-child .nav-link {
-                border-bottom: none;
-            }
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .search-bar {
-                width: 100%;
-                max-width: 100%;
-            }
-        }
-
-        /* Breadcrumb */
-        .breadcrumb-wrapper {
-            background: #fff;
-            padding: 15px 0;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin: 0;
-            font-size: 14px;
-        }
-        .breadcrumb-item + .breadcrumb-item::before {
-            content: "←";
-            padding: 0 8px;
-            color: #999;
-        }
-        .breadcrumb-item a {
-            color: var(--main);
-            text-decoration: none;
-        }
-        .breadcrumb-item a:hover {
-            text-decoration: underline;
-        }
-        .breadcrumb-item.active {
-            color: #666;
-        }
-
-        /* محتوای مقاله */
-        .article-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .article-header {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .article-header h1 {
-            font-size: 32px;
-            color: #222;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-        .article-meta {
-            color: #888;
-            font-size: 14px;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .article-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .hero-image {
-            width: 100%;
-            height: 400px;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-                        url('https://via.placeholder.com/1000x400?text=راهنمای+انتخاب+پکیج') center/cover;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-        .article-content {
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-        }
-        .article-content p {
-            margin-bottom: 20px;
-            line-height: 1.9;
-            color: #333;
-            font-size: 16px;
-        }
-        .article-content h3 {
-            font-size: 22px;
-            color: #222;
-            margin: 30px 0 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--main);
-        }
-        .article-content strong {
-            color: var(--main);
-        }
-
-        /* مقالات مرتبط */
-        .related-articles {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 50px;
-        }
-        .related-articles h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: #222;
-        }
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .related-card {
-            background: #f8f8f8;
-            padding: 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #333;
-            transition: .3s;
-            border: 2px solid transparent;
-        }
-        .related-card:hover {
-            border-color: var(--main);
-            transform: translateY(-3px);
-        }
-        .related-card h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--main);
-        }
-        .related-card p {
-            font-size: 14px;
-            color: #666;
-            margin: 0;
-        }
-
-        footer {
-            background:#1a1a1a;
-            color:#ddd;
-            padding:60px 0 20px;
-            margin-top:80px;
-        }
-        .footer-content {
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-            gap:40px;
-            margin-bottom:40px;
-        }
-        .footer-section h3 {
-            color:var(--main);
-            margin-bottom:20px;
-            font-size:20px;
-        }
-        .footer-section a {
-            color:#bbb;
-            text-decoration:none;
-            display:block;
-            margin-bottom:10px;
-        }
-        .footer-section a:hover {
-            color:#fff;
-        }
-        .footer-bottom {
-            text-align:center;
-            padding-top:25px;
-            border-top:1px solid #333;
-            color:#777;
-            font-size:14px;
-        }
-
-        @media (max-width:768px) {
-            .article-header h1 {
-                font-size: 24px;
-            }
-            .article-content {
-                padding: 25px;
-            }
-            .hero-image {
-                height: 250px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- نوار بالا -->
-    <div class="top-bar">
-        <div class="ticker">
-            <span>تلفن: 021-55661234</span>
-            <span>واتساپ: 09121234567</span>
-            <span>ارسال رایگان تهران و کرج</span>
-            <span>نصب حرفه‌ای پکیج و رادیاتور</span>
-            <span>ضمانت اصالت کالا</span>
-            <span>مشاوره رایگان تأسیسات</span>
-        </div>
-    </div>
-
-    <!-- هدر -->
-    <header class="main-header"><div class="container"><div class="header-content"><div class="logo">شوفاژ حیدری</div><form method="GET" action="{{ url_for('search') }}" class="search-bar"><input name="q" value="{{ request.args.get('q','') }}" type="text" placeholder="جستجوی پکیج، رادیاتور، شیرآلات..."><button class="search-btn" type="submit" aria-label="جستجو"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button></form></div></div>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">شوفاژ حیدری</div>
-                <div class="search-bar">
-                    <input type="text" placeholder="جستجوی پکیج، رادیاتور، شیرآلات...">
-                    <button class="search-btn" type="button" aria-label="جستجو">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="header-icons" hidden>
-                    <a href="#">سبد خرید (۰)</a>
-                    <a href="#">ورود / ثبت نام</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- منو Bootstrap -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center" id="mainNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="index.html">صفحه اصلی</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">محصولات</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">پکیج و آبگرمکن</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">رادیاتور</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">شیرآلات</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">لوله و اتصالات</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-wrapper">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">خانه</a></li>
-                    <li class="breadcrumb-item"><a href="blog.html">بلاگ</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">راهنمای انتخاب پکیج</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-
-    <!-- محتوای مقاله -->
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-wrapper">
     <div class="container">
-        <div class="article-container">
-            <!-- هدر مقاله -->
-            <div class="article-header">
-                <h1>راهنمای انتخاب پکیج دیواری برای آپارتمان</h1>
-                <div class="article-meta">
-                    <span>📅 ۱۴۰۳/۰۸/۲۳</span>
-                    <span>✍️ نویسنده: شوفاژ حیدری</span>
-                    <span>👁️ ۱۲۳۴ بازدید</span>
-                </div>
-            </div>
-
-            <!-- تصویر شاخص -->
-            <div class="hero-image"></div>
-
-            <!-- محتوای اصلی مقاله -->
-            <div class="article-content">
-                <p><strong>مقدمه:</strong> انتخاب پکیج مناسب می‌تواند تاثیر زیادی روی راحتی و هزینه‌های انرژی شما داشته باشد. در این مقاله مراحل و فاکتورهای مهم را جمع‌آوری کرده‌ایم تا بتوانید بهترین تصمیم را برای خانه خود بگیرید.</p>
-
-                <h3>۱- تعیین متراژ و نیاز حرارتی</h3>
-                <p>ابتدا متراژ فضا و میزان عایق‌بندی ساختمان را بررسی کنید. هر متر مربع فضا نیاز به حدود ۷۰ تا ۱۰۰ وات حرارت دارد که این مقدار بسته به شرایط آب و هوایی منطقه و کیفیت عایق‌بندی ساختمان متفاوت است. سپس ظرفیت حرارتی مناسب را محاسبه کنید یا از کارشناسان ما کمک بگیرید.</p>
-
-                <h3>۲- انتخاب مبدل مناسب</h3>
-                <p>مبدل تک یا دو مبدل را بر اساس نیاز آب گرم مصرفی و بودجه انتخاب کنید. پکیج‌های دو مبدل دارای کیفیت آب گرم بهتری هستند و برای خانواده‌های بزرگتر مناسب‌تر می‌باشند. همچنین توجه داشته باشید که پکیج‌های فن‌دار عملکرد بهتری در شرایط فشار گاز پایین دارند.</p>
-
-                <h3>۳- نکات نصب و نگهداری</h3>
-                <p>نصب صحیح توسط تکنسین مجرب و سرویس دوره‌ای باعث افزایش عمر دستگاه و کاهش خطاها می‌شود. توصیه می‌شود سالی یک بار قبل از شروع فصل سرما، پکیج خود را سرویس کنید تا از عملکرد بهینه آن اطمینان حاصل کنید.</p>
-
-                <h3>۴- برندهای معتبر و قیمت</h3>
-                <p>برندهای معتبر مانند ایران رادیاتور، بوتان و ایساتیس با گارانتی معتبر و قطعات یدکی اصل، گزینه‌های مناسبی برای خرید هستند. قیمت پکیج‌ها از ۲۰ میلیون تومان تا ۴۰ میلیون تومان متغیر است که باید متناسب با بودجه و نیاز خود انتخاب کنید.</p>
-
-                <h3>۵- مصرف انرژی و کلاس انرژی</h3>
-                <p>توجه به برچسب انرژی و انتخاب پکیج‌های با کلاس انرژی A یا A+ می‌تواند در بلندمدت صرفه‌جویی قابل توجهی در هزینه‌های گاز شما ایجاد کند. پکیج‌های کندانسینگ نیز با راندمان بالاتر از ۹۰ درصد، انتخاب عالی برای کاهش مصرف سوخت هستند.</p>
-            </div>
-
-            <!-- مقالات مرتبط -->
-            <div class="related-articles">
-                <h3>مقالات مرتبط</h3>
-                <div class="related-grid">
-                    <a href="#" class="related-card">
-                        <h4>نحوه سرویس و نگهداری پکیج</h4>
-                        <p>راهنمای کامل سرویس دوره‌ای و نگهداری صحیح از پکیج شوفاژ</p>
-                    </a>
-                    <a href="#" class="related-card">
-                        <h4>مقایسه انواع رادیاتورها</h4>
-                        <p>بررسی تفاوت‌های رادیاتور پنلی، آلومینیومی و چدنی</p>
-                    </a>
-                    <a href="blog.html" class="related-card">
-                        <h4>بازگشت به لیست مقالات</h4>
-                        <p>مشاهده همه مقالات و راهنماهای تخصصی</p>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">خانه</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('blog_list') }}">بلاگ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ article.title }}</li>
+            </ol>
+        </nav>
     </div>
+</div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>فروشگاه تاسیسات حیدری</h3>
-                    <p>تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت</p>
-                </div>
-                <div class="footer-section">
-                    <h3>لینک‌های سریع</h3>
-                    <a href="index.html">صفحه اصلی</a>
-                    <a href="#">پکیج</a>
-                    <a href="#">رادیاتور</a>
-                    <a href="#">شیرآلات</a>
-                </div>
-                <div class="footer-section">
-                    <h3>خدمات</h3>
-                    <a href="#">نصب و راه‌اندازی</a>
-                    <a href="#">خدمات پس از فروش</a>
-                    <a href="#">مشاوره رایگان</a>
-                </div>
-                <div class="footer-section">
-                    <h3>تماس با ما</h3>
-                    <p>تلفن: 021-55661234</p>
-                    <p>موبایل: 09121234567</p>
-                    <p>آدرس: تهران - خیابان انقلاب</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                © ۱۴۰۴ فروشگاه تاسیسات حیدری - تمامی حقوق محفوظ است
+<!-- محتوای مقاله -->
+<div class="container">
+    <div class="article-container">
+        <!-- هدر مقاله -->
+        <div class="article-header">
+            <h1>{{ article.title }}</h1>
+            <div class="article-meta">
+                <span>📅 {{ article.created_at.strftime('%Y/%m/%d') }}</span>
+                <span>✍️ نویسنده: {{ article.author }}</span>
+                <span>👁️ {{ article.view_count | default(0) }} بازدید</span>
             </div>
         </div>
-    </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        <!-- تصویر شاخص -->
+        <div class="hero-image"></div>
+
+        <!-- محتوای اصلی مقاله -->
+        <div class="article-content">
+            {{ article.content | safe }}  <!-- مهم: safe برای رندر کردن تگ‌های HTML داخل محتوا -->
+        </div>
+
+        <!-- مقالات مرتبط -->
+        {% if related_articles %}
+        <div class="related-articles">
+            <h3>مقالات مرتبط</h3>
+            <div class="related-grid">
+                {% for rel in related_articles %}
+                <a href="{{ url_for('blog_detail', slug=rel.slug) }}" class="related-card">
+                    <h4>{{ rel.title }}</h4>
+                    <p>{{ rel.summary or 'ادامه مطلب...' }}</p>
+                </a>
+                {% endfor %}
+                <a href="{{ url_for('blog_list') }}" class="related-card">
+                    <h4>بازگشت به لیست مقالات</h4>
+                    <p>مشاهده همه مقالات و راهنماهای تخصصی</p>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
