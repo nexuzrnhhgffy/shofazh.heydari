@@ -3,7 +3,7 @@
 .hero-slider {
     height:440px;
     background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-                url('3956d427-0f93-403c-9f94-cc4f8d5351ce.jpg') center/cover no-repeat;
+                url('static/images/3956d427-0f93-403c-9f94-cc4f8d5351ce.jpg') center/cover no-repeat;
     border-radius:15px;
     margin:30px auto;
     position:relative;
