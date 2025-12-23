@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>مدیریت گروه محصولات</h4>
+  <a href="{{ url_for('admin.category_add') }}" class="btn btn-primary">+ افزودن گروه جدید</a>
+</div>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-sm-4">
+    <input name="q" value="{{ request.args.get('q','') }}" class="form-control" placeholder="جستجو بر اساس نام گروه">
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-outline-primary">فیلتر</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>نام گروه</th>
+          <th>والد</th>
+          <th>ترتیب</th>
+          <th>وضعیت</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+          <tr>
+            <td>{{ c.category_name }}</td>
+            <td>{{ c.parent.category_name if c.parent }}</td>
+            <td>{{ c.sort_order }}</td>
+            <td>{{ 'فعال' if c.is_active else 'غیرفعال' }}</td>
+            <td>
+              <a href="{{ url_for('admin.category_edit', category_id=c.category_id) }}" class="btn btn-sm btn-outline-secondary">ویرایش</a>
+              <form method="POST" action="{{ url_for('admin.category_delete', category_id=c.category_id) }}" style="display:inline" onsubmit="return confirm('آیا مطمئن هستید؟')">
+                <button class="btn btn-sm btn-outline-danger">حذف</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5">گروهی یافت نشد.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

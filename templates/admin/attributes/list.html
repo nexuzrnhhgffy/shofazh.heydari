@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>مدیریت ویژگی‌ها</h4>
+  <a href="{{ url_for('admin.attribute_add') }}" class="btn btn-primary">+ افزودن ویژگی جدید</a>
+</div>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-sm-4">
+    <input name="q" value="{{ request.args.get('q','') }}" class="form-control" placeholder="جستجو بر اساس نام ویژگی">
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-outline-primary">فیلتر</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>نام ویژگی</th>
+          <th>نوع</th>
+          <th>قابل فیلتر</th>
+          <th>ترتیب</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in attributes %}
+          <tr>
+            <td>{{ a.attribute_name }}</td>
+            <td>{{ a.attribute_type }}</td>
+            <td>{{ 'بله' if a.is_filterable else 'خیر' }}</td>
+            <td>{{ a.display_order }}</td>
+            <td>
+              <a href="{{ url_for('admin.attribute_edit', attribute_id=a.attribute_id) }}" class="btn btn-sm btn-outline-secondary">ویرایش</a>
+              <form method="POST" action="{{ url_for('admin.attribute_delete', attribute_id=a.attribute_id) }}" style="display:inline" onsubmit="return confirm('آیا مطمئن هستید؟')">
+                <button class="btn btn-sm btn-outline-danger">حذف</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5">ویژگی‌ای یافت نشد.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

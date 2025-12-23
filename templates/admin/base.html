@@ -5,15 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>پنل مدیریت - HVAC</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="/static/fonts/Vazirmatn-font-face.css" rel="stylesheet">
   <link href="/static/css/admin.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ url_for('admin.dashboard') }}">پنل مدیریت</a>
-    <div class="collapse navbar-collapse">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.products_list') }}">محصولات</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            محصولات
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('admin.products_list') }}">محصولات</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('admin.variants_list') }}">واریانت‌ها</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('admin.brands_list') }}">برندها</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('admin.categories_list') }}">گروه محصولات</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('admin.attributes_list') }}">مشخصه‌ها</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            مقالات
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('admin.articles_list') }}">مقالات</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('admin.article_categories_list') }}">گروه مقالات</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('admin.article_comments_list') }}">کامنت مقالات</a></li>
+          </ul>
+        </li>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link" href="/admin/contact-messages" >
+            تماس با ما
+          </a>
+         
+        </li>
       </ul>
     </div>
   </div>

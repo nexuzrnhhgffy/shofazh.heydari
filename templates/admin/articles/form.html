@@ -1,0 +1,92 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h4>{% if article %}ویرایش مقاله: {{ article.title }}{% else %}افزودن مقاله جدید{% endif %}</h4>
+<form method="POST" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <label class="form-label">عنوان</label>
+      <input name="title" class="form-control" required value="{{ article.title if article }}">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">گروه</label>
+      <select name="category_id" class="form-select" required>
+        <option value="">--- انتخاب گروه ---</option>
+        {% for c in categories %}
+          <option value="{{ c.category_id }}" {% if article and article.category_id==c.category_id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">توضیح کوتاه</label>
+    <textarea name="short_description" class="form-control" rows="2">{{ article.short_description if article }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">محتوا</label>
+    <textarea name="content" class="form-control" rows="10" required>{{ article.content if article }}</textarea>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">نویسنده</label>
+      <input name="author_name" class="form-control" value="{{ article.author_name if article }}">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">عنوان متا</label>
+      <input name="meta_title" class="form-control" value="{{ article.meta_title if article }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">متا دسکریپشن</label>
+      <textarea name="meta_description" class="form-control" rows="2">{{ article.meta_description if article }}</textarea>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">کلمات کلیدی متا</label>
+      <textarea name="meta_keywords" class="form-control" rows="2">{{ article.meta_keywords if article }}</textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">تصویر اصلی</label>
+      <input name="featured_image" type="file" class="form-control" accept="image/*">
+      {% if article and article.featured_image %}
+        <small class="form-text text-muted">تصویر فعلی: <a href="{{ article.featured_image }}" target="_blank">مشاهده</a></small>
+      {% endif %}
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">تصویر بند انگشتی</label>
+      <input name="thumbnail_image" type="file" class="form-control" accept="image/*">
+      {% if article and article.thumbnail_image %}
+        <small class="form-text text-muted">تصویر فعلی: <a href="{{ article.thumbnail_image }}" target="_blank">مشاهده</a></small>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">منتشر شده</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_published" id="is_published" {% if article and article.is_published %}checked{% endif %}>
+        <label class="form-check-label" for="is_published">بله</label>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">مقاله ویژه</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured" {% if article and article.is_featured %}checked{% endif %}>
+        <label class="form-check-label" for="is_featured">بله</label>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">فعال</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if not article or article.is_active %}checked{% endif %}>
+        <label class="form-check-label" for="is_active">بله</label>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+    <a href="{{ url_for('admin.articles_list') }}" class="btn btn-secondary">انصراف</a>
+  </div>
+</form>
+{% endblock %}

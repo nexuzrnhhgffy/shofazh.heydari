@@ -29,7 +29,9 @@ class Brand(db.Model, TimestampMixin):
 
     brand_id = db.Column(BIGINT(unsigned=True), primary_key=True, autoincrement=True)
     brand_name = db.Column(db.String(255), nullable=False)
+    english_name = db.Column(db.String(255))  # معادل انگلیسی برند
     description = db.Column(db.Text)
+    logo_url = db.Column(db.String(500))  # لوگو برند
     is_active = db.Column(db.Boolean, default=True)
 
     products = db.relationship("Product", back_populates="brand", lazy="select")
@@ -74,6 +76,7 @@ class Product(db.Model, TimestampMixin):
 
     variants = db.relationship("ProductVariant", back_populates="product", cascade="all, delete-orphan", lazy="select")
     attributes = db.relationship("ProductAttribute", back_populates="product", cascade="all, delete-orphan", lazy="select")
+    images = db.relationship("ProductImage", back_populates="product", cascade="all, delete-orphan", lazy="select")
 
     __table_args__ = (
         db.Index("idx_products_category", "category_id"),
@@ -148,6 +151,31 @@ class ProductAttribute(db.Model, TimestampMixin):
         return f"<ProductAttribute p:{self.product_id} a:{self.attribute_id} val:{self.value}>"
 
 
+class ProductImage(db.Model, TimestampMixin):
+    __tablename__ = "product_images"
+
+    image_id = db.Column(BIGINT(unsigned=True), primary_key=True, autoincrement=True)
+    product_id = db.Column(BIGINT(unsigned=True), db.ForeignKey("products.product_id", ondelete="CASCADE"), nullable=False)
+    
+    image_url = db.Column(db.String(500), nullable=False)  # لینک تصویر
+    alt_text = db.Column(db.String(500))  # متن جایگزین - بسیار مهم برای سئو تصاویر
+    title = db.Column(db.String(300))  # عنوان تصویر (برای tooltip و سئو)
+    caption = db.Column(db.Text)  # توضیح زیر تصویر
+    sort_order = db.Column(db.Integer, default=0)  # ترتیب نمایش در گالری محصول
+    
+    is_featured = db.Column(db.Boolean, default=False)  # آیا این تصویر به عنوان تصویر اصلی استفاده شود (در صورت خالی بودن image_url در محصول)
+
+    product = db.relationship("Product", back_populates="images", lazy="joined")
+
+    __table_args__ = (
+        db.Index("idx_product_images_product", "product_id"),
+        db.Index("idx_product_images_order", "sort_order"),
+    )
+
+    def __repr__(self):
+        return f"<ProductImage {self.image_id} for Product {self.product_id}>"
+
+
 class Customer(db.Model, TimestampMixin):
     __tablename__ = "customers"
 
@@ -204,8 +232,6 @@ class OrderItem(db.Model):
 
     def __repr__(self):
         return f"<OrderItem {self.sku} x{self.quantity}>"
-
-
 
 
 class ArticleCategory(db.Model, TimestampMixin):
@@ -331,3 +357,20 @@ class ArticleImage(db.Model, TimestampMixin):
 
     def __repr__(self):
         return f"<ArticleImage {self.image_id} for Article {self.article_id}>"
+
+
+class ContactMessage(db.Model, TimestampMixin):
+    __tablename__ = "contact_messages"
+
+    message_id = db.Column(BIGINT(unsigned=True), primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255))
+    phone = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(255))
+    message = db.Column(db.Text, nullable=False)
+    response = db.Column(db.Text)
+    is_responded = db.Column(db.Boolean, default=False)
+    ip_address = db.Column(db.String(45))
+    user_agent = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<ContactMessage {self.message_id} from {self.name}>"

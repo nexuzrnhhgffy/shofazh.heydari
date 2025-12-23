@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}فروشگاه تاسیسات حیدری - صفحه اصلی{% endblock %}
+
+
+{% block title %}{% if current_category %}{{ current_category.name }} - {% endif %}فروشگاه تاسیسات حیدری - بلاگ و مقالات{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bloglist.css') }}">
@@ -12,8 +14,11 @@
         <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">خانه</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">بلاگ و مقالات</li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">خانه</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('blog_list') }}">بلاگ و مقالات</a></li>
+                    {% if current_category %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ current_category.name }}</li>
+                    {% endif %}
                 </ol>
             </nav>
         </div>
@@ -23,8 +28,8 @@
     <div class="container">
         <!-- هدر بلاگ -->
         <div class="blog-header">
-            <h1>بلاگ و مقالات تخصصی</h1>
-            <p>راهنماها، مقالات آموزشی و آخرین اخبار دنیای تاسیسات ساختمان</p>
+            <h1>{% if current_category %}{{ current_category.name }}{% else %}بلاگ و مقالات تخصصی{% endif %}</h1>
+            <p>{% if current_category %}{{ current_category.description|default('مطالب مرتبط با ' + current_category.name) }}{% else %}راهنماها، مقالات آموزشی و آخرین اخبار دنیای تاسیسات ساختمان{% endif %}</p>
         </div>
 
         <!-- بخش جستجو -->
@@ -37,84 +42,58 @@
 
         <!-- گرید مقالات -->
         <div class="post-grid">
+            {% for article in articles.items %}
             <article class="post-card">
-                <div class="post-thumbnail">📝</div>
+                <div class="post-thumbnail">
+                    {% if article.thumbnail_image %}
+                    <img src="{{ article.thumbnail_image }}" alt="{{ article.title }}">
+                    {% else %}
+                    📝
+                    {% endif %}
+                </div>
                 <div class="post-content">
-                    <h3>راهنمای انتخاب پکیج دیواری برای آپارتمان</h3>
+                    <h3><a href="{{ url_for('blog_detail', slug=article.slug) }}">{{ article.title }}</a></h3>
                     <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۸/۲۳</span>
-                        <span>⏱️ ۵ دقیقه مطالعه</span>
+                        <span>📅 {{ article.created_at.strftime('%Y/%m/%d') if article.created_at else '۱۴۰۳/۰۸/۲۳' }}</span>
+                        <span>👁️ {{ article.view_count }} بازدید</span>
                     </div>
-                    <p class="excerpt">در این مقاله نکات مهم انتخاب پکیج دیواری مناسب برای متراژهای مختلف و انواع ساختمان را بررسی می‌کنیم. از تعیین ظرفیت حرارتی تا انتخاب برند مناسب...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
+                    <p class="excerpt">{{ article.short_description or article.content[:150] + '...' }}</p>
+                    <a class="read-btn" href="{{ url_for('blog_detail', slug=article.slug) }}">ادامه مطلب</a>
                 </div>
             </article>
-
-            <article class="post-card">
-                <div class="post-thumbnail">🔧</div>
-                <div class="post-content">
-                    <h3>نگهداری رادیاتور: ۵ گام ساده</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۷/۱۲</span>
-                        <span>⏱️ ۳ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">برای افزایش عمر و بهینه‌سازی عملکرد رادیاتورها لازم است چند کار دوره‌ای انجام دهید. از تخلیه هوا گرفته تا شستشوی سیستم...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
-
-            <article class="post-card">
-                <div class="post-thumbnail">💡</div>
-                <div class="post-content">
-                    <h3>تفاوت مبدل تک و دو مبدل در پکیج‌ها</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۶/۰۵</span>
-                        <span>⏱️ ۴ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">مبدل‌ها نقش کلیدی در عملکرد پکیج‌ها ایفا می‌کنند. با مزایا و معایب هر نوع آشنا شوید و بهترین گزینه را برای خانه خود انتخاب کنید...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
-
-            <article class="post-card">
-                <div class="post-thumbnail">🌡️</div>
-                <div class="post-content">
-                    <h3>بهترین دمای پکیج برای صرفه‌جویی در مصرف</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۵/۱۸</span>
-                        <span>⏱️ ۴ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">تنظیم صحیح دمای پکیج می‌تواند تا ۳۰٪ در هزینه‌های گاز صرفه‌جویی کند. در این مقاله بهترین دماها را بررسی می‌کنیم...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
-
-            <article class="post-card">
-                <div class="post-thumbnail">🏠</div>
-                <div class="post-content">
-                    <h3>انتخاب شیرآلات مناسب برای حمام و آشپزخانه</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۴/۲۲</span>
-                        <span>⏱️ ۶ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">شیرآلات نقش مهمی در زیبایی و کاربرد فضاهای حمام و آشپزخانه دارند. راهنمای انتخاب بهترین برندها و مدل‌ها...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
-
-            <article class="post-card">
-                <div class="post-thumbnail">⚙️</div>
-                <div class="post-content">
-                    <h3>خرابی‌های رایج پکیج و راه حل آن‌ها</h3>
-                    <div class="meta">
-                        <span>📅 ۱۴۰۳/۰۳/۱۰</span>
-                        <span>⏱️ ۷ دقیقه مطالعه</span>
-                    </div>
-                    <p class="excerpt">آشنایی با خرابی‌های رایج پکیج‌های شوفاژ و روش‌های عیب‌یابی اولیه که می‌توانید خودتان انجام دهید...</p>
-                    <a class="read-btn" href="blog-detail.html">ادامه مطلب</a>
-                </div>
-            </article>
+            {% endfor %}
         </div>
+
+        <!-- Pagination -->
+        {% if articles.has_prev or articles.has_next %}
+        <div class="pagination">
+            {% if articles.has_prev %}
+            {% if current_category %}
+            <a href="{{ url_for('blog_category', category_id=current_category.category_id, page=articles.prev_num) }}" class="page-link">قبلی</a>
+            {% else %}
+            <a href="{{ url_for('blog_list', page=articles.prev_num) }}" class="page-link">قبلی</a>
+            {% endif %}
+            {% endif %}
+            {% for page_num in articles.iter_pages() %}
+            {% if page_num %}
+            {% if current_category %}
+            <a href="{{ url_for('blog_category', category_id=current_category.category_id, page=page_num) }}" class="page-link {% if page_num == articles.page %}active{% endif %}">{{ page_num }}</a>
+            {% else %}
+            <a href="{{ url_for('blog_list', page=page_num) }}" class="page-link {% if page_num == articles.page %}active{% endif %}">{{ page_num }}</a>
+            {% endif %}
+            {% else %}
+            <span class="page-link">...</span>
+            {% endif %}
+            {% endfor %}
+            {% if articles.has_next %}
+            {% if current_category %}
+            <a href="{{ url_for('blog_category', category_id=current_category.category_id, page=articles.next_num) }}" class="page-link">بعدی</a>
+            {% else %}
+            <a href="{{ url_for('blog_list', page=articles.next_num) }}" class="page-link">بعدی</a>
+            {% endif %}
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 
     

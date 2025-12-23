@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request
 
 from extensions import db
-from models import Product, Category, Brand,ArticleCategory
+from models import Product, Category, Brand,ArticleCategory, Article, ContactMessage
 
 app = Flask(__name__)
 app.config.setdefault("UPLOAD_FOLDER", "static/uploads")
@@ -49,15 +49,16 @@ def index():
 
 @app.route('/product/<slug>')
 def product_detail(slug):
-    product = Product.query.filter_by(slug=slug, is_active=True).first_or_404()
+    product = db.session.query(Product).options(db.selectinload(Product.images)).filter_by(slug=slug, is_active=True).first_or_404()
     variants = product.variants
     attributes = [(pa.attribute.attribute_name, pa.value) for pa in product.attributes]
     related = Product.query.filter(Product.category_id == product.category_id, Product.product_id != product.product_id, Product.is_active == True).limit(4).all()
     default_price = None
+    default_variant = None
     if variants:
         default_variant = next((v for v in variants if v.is_default), variants[0])
         default_price = default_variant.retail_price
-    return render_template('product.html', product=product, variants=variants, attributes=attributes, related=related, default_price=default_price)
+    return render_template('product.html', product=product, variants=variants, attributes=attributes, related=related, default_price=default_price, default_variant=default_variant)
  
 @app.route('/blog/<slug>')
 def blog_detail(slug):
@@ -100,6 +101,27 @@ def blog_list():
         article_categories=article_categories
     )
 
+@app.route('/blog/category/<int:category_id>')
+def blog_category(category_id):
+    page = request.args.get('page', 1, type=int)
+    per_page = 12
+    category = ArticleCategory.query.filter_by(category_id=category_id, is_active=True).first_or_404()
+    articles = Article.query.filter_by(category_id=category_id, is_active=True)\
+        .order_by(Article.created_at.desc())\
+        .paginate(page=page, per_page=per_page, error_out=False)
+    
+    article_categories = ArticleCategory.query.filter_by(
+        parent_id=None,
+        is_active=True
+    ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
+    
+    return render_template(
+        'blog.html',
+        articles=articles,
+        article_categories=article_categories,
+        current_category=category
+    )
+
 
 
 @app.route('/products')
@@ -113,8 +135,40 @@ def products():
 
 
 
-@app.route('/contact')
-def contact(): 
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        phone = request.form.get('phone', '').strip()
+        email = request.form.get('email', '').strip()
+        message = request.form.get('message', '').strip()
+        
+        # Validation
+        if not phone or not message:
+            return render_template('contact.html', error="شماره تماس و پیام اجباری هستند.")
+        
+        # Rate limiting: check if user sent a message in the last 5 minutes
+        ip = request.remote_addr
+        recent_message = ContactMessage.query.filter_by(ip_address=ip).filter(
+            ContactMessage.created_at > db.func.now() - db.text("INTERVAL 5 MINUTE")
+        ).first()
+        if recent_message:
+            return render_template('contact.html', error="شما نمی‌توانید در کمتر از ۵ دقیقه پیام ارسال کنید.")
+        
+        # Save message
+        new_message = ContactMessage(
+            name=name if name else None,
+            phone=phone,
+            email=email if email else None,
+            message=message,
+            ip_address=ip,
+            user_agent=request.headers.get('User-Agent')
+        )
+        db.session.add(new_message)
+        db.session.commit()
+        
+        return render_template('contact.html', success="پیام شما با موفقیت ارسال شد.")
+    
     return render_template('contact.html')
 
 

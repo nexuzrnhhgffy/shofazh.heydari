@@ -1,0 +1,74 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>مدیریت کامنت مقالات</h4>
+</div>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-sm-4">
+    <input name="q" value="{{ request.args.get('q','') }}" class="form-control" placeholder="جستجو بر اساس نام یا محتوا">
+  </div>
+  <div class="col-sm-2">
+    <select name="status" class="form-select">
+      <option value="">همه</option>
+      <option value="approved" {% if request.args.get('status')=='approved' %}selected{% endif %}>تایید شده</option>
+      <option value="pending" {% if request.args.get('status')=='pending' %}selected{% endif %}>در انتظار</option>
+      <option value="spam" {% if request.args.get('status')=='spam' %}selected{% endif %}>اسپم</option>
+    </select>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-outline-primary">فیلتر</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>مقاله</th>
+          <th>نویسنده</th>
+          <th>ایمیل</th>
+          <th>محتوا</th>
+          <th>وضعیت</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in comments %}
+          <tr>
+            <td>{{ c.article.title }}</td>
+            <td>{{ c.author_name }}</td>
+            <td>{{ c.author_email }}</td>
+            <td>{{ c.content|truncate(50) }}</td>
+            <td>
+              {% if c.is_approved %}
+                <span class="badge bg-success">تایید شده</span>
+              {% elif c.is_spam %}
+                <span class="badge bg-danger">اسپم</span>
+              {% else %}
+                <span class="badge bg-warning">در انتظار</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if not c.is_approved and not c.is_spam %}
+                <form method="POST" action="{{ url_for('admin.article_comment_approve', comment_id=c.comment_id) }}" style="display:inline">
+                  <button class="btn btn-sm btn-outline-success">تایید</button>
+                </form>
+                <form method="POST" action="{{ url_for('admin.article_comment_spam', comment_id=c.comment_id) }}" style="display:inline">
+                  <button class="btn btn-sm btn-outline-warning">اسپم</button>
+                </form>
+              {% endif %}
+              <form method="POST" action="{{ url_for('admin.article_comment_delete', comment_id=c.comment_id) }}" style="display:inline" onsubmit="return confirm('آیا مطمئن هستید؟')">
+                <button class="btn btn-sm btn-outline-danger">حذف</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="6">کامنتی یافت نشد.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

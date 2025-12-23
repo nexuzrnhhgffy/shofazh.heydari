@@ -4,6 +4,7 @@ from .models import (
     Category,
     Product,
     ProductVariant,
+    ProductImage,
     Attribute,
     ProductAttribute,
     Customer,
@@ -13,6 +14,7 @@ from .models import (
     Article,
     ArticleComment,
     ArticleImage,
+    ContactMessage
 )
 
 __all__ = [
@@ -21,6 +23,7 @@ __all__ = [
     "Category",
     "Product",
     "ProductVariant",
+    "ProductImage",
     "Attribute",
     "ProductAttribute",
     "Customer",
@@ -30,4 +33,5 @@ __all__ = [
     "Article",
     "ArticleComment",
     "ArticleImage",
+    "ContactMessage"
 ]

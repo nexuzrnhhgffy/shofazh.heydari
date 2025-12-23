@@ -1,0 +1,70 @@
+{% extends 'admin/base.html' %}
+{% block title %}جزئیات پیام تماس - پنل مدیریت{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>جزئیات پیام تماس #{{ message.message_id }}</h4>
+                    <a href="{{ url_for('admin.contact_messages_list') }}" class="btn btn-secondary">بازگشت به لیست</a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>اطلاعات فرستنده</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th>نام:</th>
+                                    <td>{{ message.name or '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>شماره تماس:</th>
+                                    <td>{{ message.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ایمیل:</th>
+                                    <td>{{ message.email or '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>تاریخ ارسال:</th>
+                                    <td>{{ message.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>IP:</th>
+                                    <td>{{ message.ip_address }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>پیام</h5>
+                            <div class="border p-3 rounded">
+                                {{ message.message }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5>پاسخ</h5>
+                    {% if message.is_responded %}
+                    <div class="alert alert-success">
+                        <strong>پاسخ داده شده:</strong><br>
+                        {{ message.response }}
+                    </div>
+                    {% else %}
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="response">پاسخ شما:</label>
+                            <textarea class="form-control" id="response" name="response" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">ارسال پاسخ</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

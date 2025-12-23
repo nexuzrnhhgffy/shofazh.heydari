@@ -7,7 +7,7 @@
 }
 * {margin:0;padding:0;box-sizing:border-box;}
 body {
-    font-family: 'Vazir', Tahoma, sans-serif;
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
     direction: rtl;
     background:var(--bg);
     line-height: 1.6;

@@ -41,7 +41,18 @@
 
 <section class="contact-section"><div class="container"><div class="contact-card"><h2 class="section-title">اطلاعات <span>تماس</span></h2><div class="contact-info"><div class="info-item"><i>📞</i><h4>تلفن تماس</h4><p>021-55661234</p><p>026-33445566</p></div><div class="info-item"><i>📱</i><h4>موبایل و واتساپ</h4><p>09121234567</p><p>09351234567</p></div><div class="info-item"><i>📧</i><h4>ایمیل</h4><p>info@heidari.com</p><p>support@heidari.com</p></div><div class="info-item"><i>⏰</i><h4>ساعات کاری</h4><p>شنبه تا پنجشنبه</p><p>۸ صبح تا ۸ شب</p></div></div></div>
 
-<div class="row mt-5"><div class="col-lg-6 mb-4"><h3 class="section-title" style="font-size:24px">موقعیت <span>فروشگاه در کرج</span></h3><div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51405.02797307711!2d50.926523!3d35.83379!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8dff1c8c5b5c5f%3A0x1c1c5b5c5c5c5c5c!2z2qnYsdis!5e0!3m2!1sfa!2sir!4v1234567890" loading="lazy"></iframe></div></div><div class="col-lg-6"><h3 class="section-title" style="font-size:24px">فرم <span>تماس با ما</span></h3><div class="contact-form"><form><input type="text" class="form-control" placeholder="نام و نام خانوادگی" required><input type="tel" class="form-control" placeholder="شماره تماس" required><input type="email" class="form-control" placeholder="ایمیل" required><textarea class="form-control" rows="5" placeholder="پیام شما..." required></textarea><button type="submit" class="btn-submit">ارسال پیام</button></form></div></div></div></div></section>
+<div class="row mt-5"><div class="col-lg-6 mb-4"><h3 class="section-title" style="font-size:24px">موقعیت <span>فروشگاه در کرج</span></h3><div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51405.02797307711!2d50.926523!3d35.83379!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8dff1c8c5b5c5f%3A0x1c1c5b5c5c5c5c5c!2z2qnYsdis!5e0!3m2!1sfa!2sir!4v1234567890" loading="lazy"></iframe></div></div><div class="col-lg-6"><h3 class="section-title" style="font-size:24px">فرم <span>تماس با ما</span></h3>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+{{ message }}
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="contact-form"><form method="post"><input type="text" name="name" class="form-control" placeholder="نام و نام خانوادگی"><input type="tel" name="phone" class="form-control" placeholder="شماره تماس" required><input type="email" name="email" class="form-control" placeholder="ایمیل"><textarea name="message" class="form-control" rows="5" placeholder="پیام شما..." required></textarea><button type="submit" class="btn-submit">ارسال پیام</button></form></div></div></div></div></section>
 
 {% block extra_js %} 
 {% endblock %}

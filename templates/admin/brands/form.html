@@ -1,0 +1,40 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h4>{% if brand %}ویرایش برند: {{ brand.brand_name }}{% else %}افزودن برند جدید{% endif %}</h4>
+<form method="POST" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">نام برند</label>
+      <input name="brand_name" class="form-control" required value="{{ brand.brand_name if brand }}">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">معادل انگلیسی</label>
+      <input name="english_name" class="form-control" value="{{ brand.english_name if brand }}">
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">توضیح</label>
+    <textarea name="description" class="form-control" rows="3">{{ brand.description if brand }}</textarea>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">لوگو برند</label>
+      <input name="logo" type="file" class="form-control" accept="image/*">
+      {% if brand and brand.logo_url %}
+        <small class="form-text text-muted">لوگو فعلی: <img src="{{ brand.logo_url }}" alt="لوگو" style="width: 50px; height: 50px; object-fit: cover;"></small>
+      {% endif %}
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">وضعیت</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if not brand or brand.is_active %}checked{% endif %}>
+        <label class="form-check-label" for="is_active">فعال</label>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+    <a href="{{ url_for('admin.brands_list') }}" class="btn btn-secondary">انصراف</a>
+  </div>
+</form>
+{% endblock %}

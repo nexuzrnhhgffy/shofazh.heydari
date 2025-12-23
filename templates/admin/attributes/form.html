@@ -1,0 +1,38 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h4>{% if attribute %}ویرایش ویژگی: {{ attribute.attribute_name }}{% else %}افزودن ویژگی جدید{% endif %}</h4>
+<form method="POST">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">نام ویژگی</label>
+      <input name="attribute_name" class="form-control" required value="{{ attribute.attribute_name if attribute }}">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">نوع ویژگی</label>
+      <select name="attribute_type" class="form-select" required>
+        <option value="text" {% if attribute and attribute.attribute_type=='text' %}selected{% endif %}>متن</option>
+        <option value="number" {% if attribute and attribute.attribute_type=='number' %}selected{% endif %}>عدد</option>
+        <option value="boolean" {% if attribute and attribute.attribute_type=='boolean' %}selected{% endif %}>بله/خیر</option>
+        <option value="select" {% if attribute and attribute.attribute_type=='select' %}selected{% endif %}>انتخابی</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">ترتیب نمایش</label>
+      <input name="display_order" type="number" class="form-control" value="{{ attribute.display_order if attribute else 0 }}">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">قابل فیلتر</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_filterable" id="is_filterable" {% if attribute and attribute.is_filterable %}checked{% endif %}>
+        <label class="form-check-label" for="is_filterable">بله</label>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+    <a href="{{ url_for('admin.attributes_list') }}" class="btn btn-secondary">انصراف</a>
+  </div>
+</form>
+{% endblock %}

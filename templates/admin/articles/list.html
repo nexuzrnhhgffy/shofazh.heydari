@@ -1,0 +1,67 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>مدیریت مقالات</h4>
+  <a href="{{ url_for('admin.article_add') }}" class="btn btn-primary">+ افزودن مقاله جدید</a>
+</div>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-sm-3">
+    <input name="q" value="{{ request.args.get('q','') }}" class="form-control" placeholder="جستجو بر اساس عنوان">
+  </div>
+  <div class="col-sm-2">
+    <select name="category_id" class="form-select">
+      <option value="">همه گروه‌ها</option>
+      {% for c in categories %}
+        <option value="{{ c.category_id }}" {% if request.args.get('category_id')==c.category_id|string %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-sm-2">
+    <select name="status" class="form-select">
+      <option value="">همه</option>
+      <option value="published" {% if request.args.get('status')=='published' %}selected{% endif %}>منتشر شده</option>
+      <option value="draft" {% if request.args.get('status')=='draft' %}selected{% endif %}>پیش‌نویس</option>
+    </select>
+  </div>
+  <div class="col-sm-1">
+    <button class="btn btn-outline-primary">فیلتر</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>عنوان</th>
+          <th>گروه</th>
+          <th>نویسنده</th>
+          <th>وضعیت</th>
+          <th>بازدید</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in articles %}
+          <tr>
+            <td>{{ a.title }}</td>
+            <td>{{ a.category.name if a.category }}</td>
+            <td>{{ a.author_name }}</td>
+            <td>{{ 'منتشر شده' if a.is_published else 'پیش‌نویس' }}</td>
+            <td>{{ a.view_count }}</td>
+            <td>
+              <a href="{{ url_for('admin.article_edit', article_id=a.article_id) }}" class="btn btn-sm btn-outline-secondary">ویرایش</a>
+              <form method="POST" action="{{ url_for('admin.article_delete', article_id=a.article_id) }}" style="display:inline" onsubmit="return confirm('آیا مطمئن هستید؟')">
+                <button class="btn btn-sm btn-outline-danger">حذف</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="6">مقاله‌ای یافت نشد.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

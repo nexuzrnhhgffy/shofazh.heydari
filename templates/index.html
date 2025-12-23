@@ -106,7 +106,7 @@
                 <!-- آیکن را می‌توانید در مدل ArticleCategory فیلد icon_url اضافه کنید، یا بر اساس slug انتخاب کنید -->
                 <img src="{{ cat.icon_url|default('https://cdn-icons-png.flaticon.com/128/2869/2869863.png') }}" alt="{{ cat.name }}">
             </div>
-            <h3><a class="no-decoration" href="{{ url_for('blog_category', category_id=cat.id) }}"> {{ cat.name }} </a></h3>
+            <h3><a class="no-decoration" href="{{ url_for('blog_category', category_id=cat.category_id) }}"> {{ cat.name }} </a></h3>
             <p>{{ cat.description|default('مطالب مرتبط با ' + cat.name) }}</p>
         </div>
         {% endfor %}

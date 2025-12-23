@@ -4,29 +4,81 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+<style>
+  .variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .variant-option {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fff;
+    min-width: 140px;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .variant-option:hover {
+    border-color: #ff8800;
+    box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+  }
+
+  .variant-option.selected {
+    border-color: #ff8800;
+    background: #f0f8ff;
+    box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+    font-weight: 600;
+  }
+
+  .variant-name {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  .variant-price {
+    display: block;
+    font-size: 14px;
+    color: #28a745;
+    font-weight: 600;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
 
-
 <div class="breadcrumb-wrapper"><div class="container"><nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">خانه</a></li><li class="breadcrumb-item"><a href="{{ url_for('products') }}">محصولات</a></li><li class="breadcrumb-item"><a href="#">پکیج دیواری</a></li><li class="breadcrumb-item active">{{ product.product_name }}</li></ol></nav></div></div>
+
 <div class="container"><div class="product-page">
   <div class="product-container">
     <div class="product-gallery">
-      {% if product.image_url %}
+      {% if product.images %}
+        {% set main_img = product.images[0] %}
+        <img src="/{{ main_img.image_url }}" alt="{{ main_img.alt_text or product.product_name }}" class="main-image" id="mainImg">
+      {% elif product.image_url %}
         <img src="/{{ product.image_url }}" alt="{{ product.product_name }}" class="main-image" id="mainImg">
       {% else %}
         <img src="https://via.placeholder.com/600x480?text=No+Image" alt="{{ product.product_name }}" class="main-image" id="mainImg">
       {% endif %}
 
-      <div class="thumbnails">
-        {% for v in variants[:4] %}
-          {% if v.product.image_url %}
-            <img src="/{{ v.product.image_url }}" alt="{{ product.product_name }}" class="thumb {% if loop.first %}active{% endif %}" onclick="changeImage(this)">
-          {% else %}
-            <img src="https://via.placeholder.com/90?text=img" alt="thumb" class="thumb {% if loop.first %}active{% endif %}" onclick="changeImage(this)">
-          {% endif %}
-        {% endfor %}
+      <div class="thumbnails" id="thumbnails">
+        {% if product.images %}
+          {% for img in product.images %}
+            <img src="/{{ img.image_url }}" alt="{{ img.alt_text or product.product_name }}" class="thumb {% if loop.first %}active{% endif %}" onclick="changeImage(this)">
+          {% endfor %}
+        {% else %}
+          {% for v in variants[:4] %}
+            {% set thumb_src = v.product.image_url if v.product.image_url else "https://via.placeholder.com/90?text=img" %}
+            <img src="/{{ thumb_src }}" alt="{{ product.product_name }}" class="thumb {% if loop.first %}active{% endif %}" onclick="changeImage(this)" data-variant-id="{{ v.variant_id }}">
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
 
@@ -38,10 +90,31 @@
       <div class="price-box">
         <div class="price-wrapper">
           <div>
-            <span class="current-price">{{ default_price|currency }}</span>
+            <span class="current-price" id="current-price">{{ default_price|currency }}</span>
           </div>
         </div>
       </div>
+
+      <!-- بخش جدید انتخاب واریانت -->
+      {% if variants|length > 1 %}
+      <div class="variant-selection">
+        <label style="font-weight:600; margin-bottom:8px; display:block;">انتخاب مدل:</label>
+        <div class="variant-options">
+          {% for v in variants %}
+            <div class="variant-option {% if v.variant_id == default_variant.variant_id %}selected{% endif %}"
+                 onclick="selectVariant({{ v.variant_id }}, '{{ v.retail_price|currency }}', this)"
+                 data-price="{{ v.retail_price }}"
+                 data-price-formatted="{{ v.retail_price|currency }}"
+                 data-variant-id="{{ v.variant_id }}">
+              <span class="variant-name">
+                {{ v.variant_name or (v.size_value + ' ' + v.size_unit if v.size_value and v.size_unit else 'استاندارد') }}
+              </span>
+              <span class="variant-price">{{ v.retail_price|currency }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
 
       <div class="quantity-box">
         <button class="quantity-btn" onclick="changeQty(-1)">−</button>
@@ -51,14 +124,10 @@
 
       <button class="add-to-cart-big">افزودن به سبد خرید</button>
 
-      <ul class="features-list">
-        {% for name, val in attributes %}
-          <li>{{ name }}: {{ val }}</li>
-        {% endfor %}
-      </ul>
     </div>
   </div>
 
+  <!-- بقیه بخش‌ها (تب‌ها، محصولات مرتبط و ...) بدون تغییر -->
   <div class="tabs">
     <div class="tab-links">
       <div class="tab-link active" onclick="openTab('desc')">توضیحات</div>
@@ -76,8 +145,9 @@
     <div id="reviews" class="tab-pane"><div class="tab-content"><p style="color:#999;text-align:center;padding:40px 0">هنوز نظری ثبت نشده است. اولین نفر باشید!</p></div></div>
   </div>
 
-</div>
+</div></div>
 
+<!-- بخش محصولات مرتبط و بقیه محتوا بدون تغییر -->
 <div class="related-products">
   <h2>محصولات مرتبط</h2>
   <div class="related-grid">
@@ -101,13 +171,53 @@
       <p class="text-muted">محصول مرتبطی یافت نشد.</p>
     {% endfor %}
   </div>
-</div><div class="tabs"><div class="tab-links"><div class="tab-link active" onclick="openTab('desc')">توضیحات</div><div class="tab-link" onclick="openTab('specs')">مشخصات فنی</div><div class="tab-link" onclick="openTab('reviews')">نظرات کاربران</div></div><div id="desc" class="tab-pane active"><div class="tab-content"><p><strong>پکیج دیواری ایران رادیاتور M24FF</strong> یکی از پرفروش‌ترین مدل‌های دو مبدل در ایران است که مناسب آپارتمان‌های تا ۱۵۰ متر مربع می‌باشد.</p><br><p>این پکیج با راندمان بالا، مصرف گاز بهینه و صدای بسیار کم، انتخاب اول بسیاری از مشتریان است. دارای سیستم عیب‌یابی هوشمند و صفحه نمایش دیجیتال برای تنظیم دما و نمایش خطاها.</p><br><p>نصب و راه‌اندازی توسط تیم مجاز ایران رادیاتور انجام می‌شود و شامل خدمات پس از فروش ۲۴ ماهه می‌باشد.</p></div></div><div id="specs" class="tab-pane"><div class="tab-content"><table class="specs-table"><tr><td>ظرفیت حرارتی</td><td>۲۴,۰۰۰ kcal/h</td></tr><tr><td>نوع مبدل</td><td>دو مبدل</td></tr><tr><td>فن دودکش</td><td>دارد (فن‌دار)</td></tr><tr><td>ابعاد</td><td>۷۳۰×۴۰۰×۳۳۰ میلی‌متر</td></tr><tr><td>وزن</td><td>۳۴ کیلوگرم</td></tr><tr><td>گارانتی</td><td>۲۴ ماه ایران رادیاتور</td></tr></table></div></div><div id="reviews" class="tab-pane"><div class="tab-content"><p style="color:#999;text-align:center;padding:40px 0">هنوز نظری ثبت نشده است. اولین نفر باشید!</p></div></div></div></div><div class="related-products"><h2>محصولات مرتبط</h2><div class="related-grid"><div class="related-card"><div class="related-image"><img src="https://cdn-icons-png.flaticon.com/128/2917/2917995.png" alt="پکیج" style="width:80px;height:80px"></div><div class="related-info"><h3>پکیج بوتان مدل CV424</h3><div class="related-price">۳۱,۲۰۰,۰۰۰ تومان</div><button class="view-btn">مشاهده محصول</button></div></div><div class="related-card"><div class="related-image"><img src="https://cdn-icons-png.flaticon.com/128/2062/2062614.png" alt="رادیاتور" style="width:80px;height:80px"></div><div class="related-info"><h3>رادیاتور پنلی لورچ ۱۰۰ سانت</h3><div class="related-price">۲,۸۵۰,۰۰۰ تومان</div><button class="view-btn">مشاهده محصول</button></div></div><div class="related-card"><div class="related-image"><img src="https://cdn-icons-png.flaticon.com/128/2249/2249326.png" alt="شیرآلات" style="width:80px;height:80px"></div><div class="related-info"><h3>شیرآلات قهرمان تنسو کروم</h3><div class="related-price">۸,۹۰۰,۰۰۰ تومان</div><button class="view-btn">مشاهده محصول</button></div></div></div></div></div>
-
-
+</div>
 
 {% block extra_js %}
-<script>function changeImage(t){document.getElementById("mainImg").src=t.src,document.querySelectorAll(".thumb").forEach(e=>e.classList.remove("active")),t.classList.add("active")}function changeQty(t){let e=document.getElementById("qty"),a=parseInt(e.value)+t;a<1&&(a=1),e.value=a}function openTab(t){document.querySelectorAll(".tab-pane").forEach(t=>t.classList.remove("active")),document.querySelectorAll(".tab-link").forEach(t=>t.classList.remove("active")),document.getElementById(t).classList.add("active"),event.target.classList.add("active")}</script>
-{% endblock %}
+<script>
+function changeImage(t){
+  document.getElementById("mainImg").src = t.src;
+  document.querySelectorAll(".thumb").forEach(e => e.classList.remove("active"));
+  t.classList.add("active");
+}
 
+function changeQty(t){
+  let e = document.getElementById("qty"),
+      a = parseInt(e.value) + t;
+  a < 1 && (a = 1);
+  e.value = a;
+}
+
+function openTab(t){
+  document.querySelectorAll(".tab-pane").forEach(e => e.classList.remove("active"));
+  document.querySelectorAll(".tab-link").forEach(e => e.classList.remove("active"));
+  document.getElementById(t).classList.add("active");
+  event.target.classList.add("active");
+}
+
+function selectVariant(variantId, priceFormatted, element) {
+  // تغییر قیمت
+  document.getElementById('current-price').innerText = priceFormatted;
+
+  // حذف کلاس selected از همه
+  document.querySelectorAll('.variant-option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+
+  // اضافه کردن به انتخاب‌شده
+  element.classList.add('selected');
+
+  // تغییر تصاویر گالری به تصاویر واریانت انتخاب‌شده (اگر وجود داشته باشد)
+  const thumbs = document.querySelectorAll(`.thumb[data-variant-id="${variantId}"]`);
+  if (thumbs.length > 0) {
+    // نمایش فقط تصاویر این واریانت (در صورت نیاز می‌تونی فیلتر کنی)
+    // فعلاً فقط اولین تصویرش رو می‌ذاریم به عنوان اصلی
+    document.getElementById("mainImg").src = thumbs[0].src;
+    document.querySelectorAll(".thumb").forEach(e => e.classList.remove("active"));
+    thumbs[0].classList.add("active");
+  }
+}
+</script>
+{% endblock %}
 
 {% endblock %}
