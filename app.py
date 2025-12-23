@@ -34,6 +34,21 @@ except Exception:
     pass
 
 
+@app.context_processor
+def inject_menu_categories():
+    try:
+        rows = db.session.query(
+            Category,
+            db.func.count(Product.product_id).label('pcount')
+        ).outerjoin(Product, Product.category_id == Category.category_id)
+        rows = rows.filter(Category.parent_id == None)
+        rows = rows.group_by(Category.category_id).order_by(db.func.count(Product.product_id).desc()).limit(3).all()
+        categories = [r[0] for r in rows]
+        return dict(menu_categories=categories)
+    except Exception:
+        return dict(menu_categories=[])
+
+
 @app.route('/')
 def index():
     categories = Category.query.filter_by(parent_id=None).order_by(Category.category_name).all()
@@ -42,7 +57,8 @@ def index():
         parent_id=None,
         is_active=True
     ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
-    return render_template('index.html', categories=categories, featured_products=featured_products, article_categories=article_categories)
+    brands = Brand.query.filter_by(is_active=True).order_by(Brand.brand_name).all()
+    return render_template('index.html', categories=categories, featured_products=featured_products, article_categories=article_categories, brands=brands)
 
  
 
@@ -64,11 +80,9 @@ def product_detail(slug):
 def blog_detail(slug):
     article = Article.query.filter_by(slug=slug, is_active=True).first_or_404()
     
-    # افزایش تعداد بازدید
     article.view_count += 1
     db.session.commit()
     
-    # مقالات مرتبط: از همان دسته، غیر از خودش، فعال، محدود به ۳ تا
     related_articles = Article.query.filter(
         Article.category_id == article.category_id,
         Article.id != article.id,
@@ -81,7 +95,6 @@ def blog_detail(slug):
         related_articles=related_articles
     )
 
-# اگر صفحه لیست مقالات ندارید، می‌توانید این روت را هم اضافه کنید
 @app.route('/blog')
 def blog_list():
     page = request.args.get('page', 1, type=int)

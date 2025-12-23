@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="/static/fonts/Vazirmatn-font-face.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <title>ورود ادمین</title>
+  <style>body{font-family: Vazirmatn, sans-serif;padding:40px;background:#f7f7f7} .card{max-width:420px;margin:0 auto}</style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">ورود به پنل ادمین</h5>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat, msg in messages %}
+            <div class="alert alert-{{ cat }}" role="alert">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <form method="post" action="{{ url_for('admin.login') }}">
+        <div class="mb-3">
+          <label class="form-label">نام کاربری</label>
+          <input name="username" class="form-control" autofocus>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">رمز عبور</label>
+          <input name="password" type="password" class="form-control">
+        </div>
+        <input type="hidden" name="next" value="{{ request.args.get('next','') }}">
+        <button class="btn btn-primary" type="submit">ورود</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

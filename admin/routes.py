@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app, session
 from werkzeug.utils import secure_filename
 import os
 from extensions import db
@@ -17,6 +17,43 @@ from models import (
 )
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="../templates/admin")
+
+# simple hardcoded admin credentials
+ADMIN_USER = "admin"
+ADMIN_PASS = "admin123"
+
+
+@admin_bp.before_request
+def require_admin_login():
+    # allow login page
+    if request.endpoint == 'admin.login':
+        return None
+    # allow static file serving
+    if request.endpoint and request.endpoint.endswith('static'):
+        return None
+    # check session
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login', next=request.path))
+
+
+@admin_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    username = request.form.get('username', '')
+    password = request.form.get('password', '')
+    next_url = request.form.get('next') or request.args.get('next') or url_for('admin.dashboard')
+    if username == ADMIN_USER and password == ADMIN_PASS:
+        session['admin_logged_in'] = True
+        return redirect(next_url)
+    flash('نام کاربری یا رمز عبور اشتباه است.', 'danger')
+    return render_template('login.html')
+
+
+@admin_bp.route('/logout')
+def logout():
+    session.pop('admin_logged_in', None)
+    return redirect(url_for('admin.login'))
 
 
 @admin_bp.route("/dashboard")
