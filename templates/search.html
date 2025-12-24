@@ -32,7 +32,7 @@
               <label class="form-label">دسته‌بندی</label>
               {% for c in categories %}
                 <div class="form-check">
-                  <input class="form-check-input filter-category" type="checkbox" value="{{ c.category_name }}" id="cat{{ c.category_id }}" {% if request.args.get('category_id')==c.category_id|string %}checked{% endif %}>
+                  <input class="form-check-input filter-category" type="checkbox" value="{{ c.category_id }}" id="cat{{ c.category_id }}" {% if (c.category_id|string) in request.args.getlist('category_id') %}checked{% endif %}>
                   <label class="form-check-label" for="cat{{ c.category_id }}">{{ c.category_name }}</label>
                 </div>
               {% endfor %}
@@ -50,7 +50,7 @@
               <label class="form-label">برند</label>
               {% for b in brands %}
               <div class="form-check">
-                <input class="form-check-input filter-brand" type="checkbox" value="{{ b.brand_name }}" id="b{{ b.brand_id }}" {% if request.args.get('brand_id')==b.brand_id|string %}checked{% endif %}>
+                <input class="form-check-input filter-brand" type="checkbox" value="{{ b.brand_id }}" id="b{{ b.brand_id }}" {% if (b.brand_id|string) in request.args.getlist('brand_id') %}checked{% endif %}>
                 <label class="form-check-label" for="b{{ b.brand_id }}">{{ b.brand_name }}</label>
               </div>
               {% endfor %}
@@ -71,10 +71,10 @@
           <div class="d-flex align-items-center">
             <label class="me-2 mb-0">مرتب‌سازی:</label>
             <select id="sort-by" class="form-select form-select-sm">
-              <option value="relevance">مرتبط‌ترین</option>
-              <option value="price-asc">قیمت: کم به زیاد</option>
-              <option value="price-desc">قیمت: زیاد به کم</option>
-              <option value="newest">جدیدترین</option>
+              <option value="relevance" {% if sort_by=='relevance' %}selected{% endif %}>مرتبط‌ترین</option>
+              <option value="price-asc" {% if sort_by=='price-asc' %}selected{% endif %}>قیمت: کم به زیاد</option>
+              <option value="price-desc" {% if sort_by=='price-desc' %}selected{% endif %}>قیمت: زیاد به کم</option>
+              <option value="newest" {% if sort_by=='newest' %}selected{% endif %}>جدیدترین</option>
             </select>
           </div>
         </div>
@@ -132,17 +132,29 @@
     const params = new URLSearchParams(location.search);
     const q = params.get('q');
     if(q && document.getElementById('q')) document.getElementById('q').value = decodeURIComponent(q);
+    const min = params.get('price_min');
+    const max = params.get('price_max');
+    if(min && document.getElementById('price-min')) document.getElementById('price-min').value = min;
+    if(max && document.getElementById('price-max')) document.getElementById('price-max').value = max;
+    // sort is reflected by server-side via sort_by variable
   })();
 
   document.getElementById('apply-filters').addEventListener('click', function(e){
     e.preventDefault();
     const q = document.getElementById('q') ? document.getElementById('q').value.trim() : '';
-    const cat = document.querySelector('.filter-category:checked');
-    const brand = document.querySelector('.filter-brand:checked');
+    const cats = Array.from(document.querySelectorAll('.filter-category:checked')).map(n => n.value);
+    const brands = Array.from(document.querySelectorAll('.filter-brand:checked')).map(n => n.value);
+    const priceMin = document.getElementById('price-min') ? document.getElementById('price-min').value : '';
+    const priceMax = document.getElementById('price-max') ? document.getElementById('price-max').value : '';
+    const sort = document.getElementById('sort-by') ? document.getElementById('sort-by').value : '';
+
     const url = new URL(location.origin + '{{ url_for("search") }}');
     if (q) url.searchParams.set('q', q);
-    if (cat) url.searchParams.set('category_id', cat.id.replace('cat',''));
-    if (brand) url.searchParams.set('brand_id', brand.id.replace('b',''));
+    cats.forEach(c => url.searchParams.append('category_id', c));
+    brands.forEach(b => url.searchParams.append('brand_id', b));
+    if (priceMin) url.searchParams.set('price_min', priceMin);
+    if (priceMax) url.searchParams.set('price_max', priceMax);
+    if (sort) url.searchParams.set('sort', sort);
     location.href = url.toString();
   });
 

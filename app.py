@@ -305,36 +305,97 @@ def contact():
 
 @app.route('/search')
 def search():
-    query = request.args.get('q', '').strip()
-    
-    if not query:
-        return render_template('search.html', query='', products=[], articles=[])
-    
-    # جستجو در محصولات (نام، توضیحات، برند، دسته)
-    products = Product.query.filter(
-        Product.is_active == True,
-        (
-            Product.product_name.ilike(f'%{query}%') |
-            Product.description.ilike(f'%{query}%') |
-            Product.brand.has(Brand.brand_name.ilike(f'%{query}%'))
+    # Read query and filter/sort params
+    q = request.args.get('q', '').strip()
+    page = int(request.args.get('page', 1))
+    per_page = 12
+    category_ids = request.args.getlist('category_id')
+    brand_ids = request.args.getlist('brand_id')
+    try:
+        price_min = float(request.args.get('price_min')) if request.args.get('price_min') else None
+    except Exception:
+        price_min = None
+    try:
+        price_max = float(request.args.get('price_max')) if request.args.get('price_max') else None
+    except Exception:
+        price_max = None
+    sort_by = request.args.get('sort', 'relevance')
+
+    # Base product query
+    products_q = Product.query.filter(Product.is_active == True)
+
+    # Text query
+    if q:
+        products_q = products_q.filter(
+            (Product.product_name.ilike(f'%{q}%')) |
+            (Product.description.ilike(f'%{q}%')) |
+            Product.brand.has(Brand.brand_name.ilike(f'%{q}%'))
         )
-    ).order_by(Product.created_at.desc()).limit(20).all()
-    
-    # جستجو در مقالات (عنوان و محتوا)
-    articles = Article.query.filter(
-        Article.is_active == True,
-        (
-            Article.title.ilike(f'%{query}%') |
-            Article.content.ilike(f'%{query}%')
-        )
-    ).order_by(Article.created_at.desc()).limit(10).all()
-    
-    return render_template(
-        'search.html',
-        query=query,
-        products=products,
-        articles=articles
-    )
+
+    # Category filter (allow multiple)
+    if category_ids:
+        ids = [int(x) for x in category_ids if str(x).isdigit()]
+        if ids:
+            products_q = products_q.filter(Product.category_id.in_(ids))
+
+    # Brand filter (allow multiple)
+    if brand_ids:
+        ids = [int(x) for x in brand_ids if str(x).isdigit()]
+        if ids:
+            products_q = products_q.filter(Product.brand_id.in_(ids))
+
+    # Price filter requires joining variants
+    from models import ProductVariant
+    joined_variants = False
+    if price_min is not None or price_max is not None or sort_by in ('price-asc', 'price-desc'):
+        products_q = products_q.join(Product.variants)
+        joined_variants = True
+        if price_min is not None:
+            products_q = products_q.filter(ProductVariant.retail_price >= price_min)
+        if price_max is not None:
+            products_q = products_q.filter(ProductVariant.retail_price <= price_max)
+
+    # Sorting
+    if sort_by == 'price-asc':
+        products_q = products_q.order_by(ProductVariant.retail_price.asc()) if joined_variants else products_q
+    elif sort_by == 'price-desc':
+        products_q = products_q.order_by(ProductVariant.retail_price.desc()) if joined_variants else products_q
+    elif sort_by == 'newest':
+        products_q = products_q.order_by(Product.created_at.desc())
+    else:
+        # relevance or default
+        products_q = products_q.order_by(Product.created_at.desc())
+
+    # Remove duplicates when joined with variants
+    if joined_variants:
+        products_q = products_q.group_by(Product.product_id)
+
+    # Total count
+    try:
+        total = products_q.with_entities(db.func.count(Product.product_id)).scalar() or 0
+    except Exception:
+        try:
+            total = products_q.count()
+        except Exception:
+            total = 0
+
+    # Pagination
+    try:
+        products = products_q.offset((page - 1) * per_page).limit(per_page).all()
+    except Exception:
+        products = []
+
+    # categories and brands for filters
+    try:
+        categories = Category.query.filter_by(is_active=True).order_by(Category.category_name).all()
+    except Exception:
+        categories = []
+    try:
+        brands = Brand.query.filter_by(is_active=True).order_by(Brand.brand_name).all()
+    except Exception:
+        brands = []
+
+    return render_template('search.html', q=q, products=products, total=total, categories=categories, brands=brands, page=page, per_page=per_page, sort_by=sort_by)
 
 
 if __name__ == '__main__':
