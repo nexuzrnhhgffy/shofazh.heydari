@@ -168,7 +168,7 @@
     
     <h2 class="section-title">دسته‌بندی محصولات</h2>
     <div class="category-grid">
-        {% for c in categories %}
+        {% for c in categories|default([]) %}
         <div class="category-card">
             <div class="category-icon">
                 <img src="https://cdn-icons-png.flaticon.com/128/2062/2062614.png" alt="{{ c.category_name }}">
@@ -190,7 +190,7 @@
         <button class="slider-btn slider-btn-left" onclick="scrollBrands(-1)" > › </button>
         <div class="brands-slider" id="brandsSlider">
             <div class="brands-track">
-                {% for b in brands %}
+                {% for b in brands|default([]) %}
                 <div class="brand-item">
                     <a class="no-decoration" href="{{ url_for('search') }}?q={{ b.brand_name }}">
                         {% if b.logo_url %}

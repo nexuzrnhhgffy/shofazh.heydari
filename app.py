@@ -97,13 +97,25 @@ def inject_site_texts():
 
 @app.route('/')
 def index():
-    categories = Category.query.filter_by(parent_id=None).order_by(Category.category_name).all()
-    featured_products = Product.query.filter_by(is_active=True).order_by(Product.created_at.desc()).limit(8).all()
-    article_categories = ArticleCategory.query.filter_by(
-        parent_id=None,
-        is_active=True
-    ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
-    brands = Brand.query.filter_by(is_active=True).order_by(Brand.brand_name).all()
+    try:
+        categories = Category.query.filter_by(parent_id=None).order_by(Category.category_name).all() or []
+    except Exception:
+        categories = []
+    try:
+        featured_products = Product.query.filter_by(is_active=True).order_by(Product.created_at.desc()).limit(8).all() or []
+    except Exception:
+        featured_products = []
+    try:
+        article_categories = ArticleCategory.query.filter_by(
+            parent_id=None,
+            is_active=True
+        ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all() or []
+    except Exception:
+        article_categories = []
+    try:
+        brands = Brand.query.filter_by(is_active=True).order_by(Brand.brand_name).all() or []
+    except Exception:
+        brands = []
     return render_template('index.html', categories=categories, featured_products=featured_products, article_categories=article_categories, brands=brands)
 
  
@@ -111,7 +123,10 @@ def index():
 
 @app.route('/product/<slug>')
 def product_detail(slug):
-    product = db.session.query(Product).options(db.selectinload(Product.images)).filter_by(slug=slug, is_active=True).first_or_404()
+    try:
+        product = db.session.query(Product).options(db.selectinload(Product.images)).filter_by(slug=slug, is_active=True).first_or_404()
+    except Exception:
+        return render_template('product.html', product=None), 404
     variants = product.variants
     attributes = [(pa.attribute.attribute_name, pa.value) for pa in product.attributes]
     related = Product.query.filter(Product.category_id == product.category_id, Product.product_id != product.product_id, Product.is_active == True).limit(4).all()
@@ -124,17 +139,26 @@ def product_detail(slug):
  
 @app.route('/blog/<slug>')
 def blog_detail(slug):
-    article = Article.query.filter_by(slug=slug, is_active=True).first_or_404()
-    
-    article.view_count += 1
-    db.session.commit()
-    
-    related_articles = Article.query.filter(
-        Article.category_id == article.category_id,
-        Article.id != article.id,
-        Article.is_active == True
-    ).order_by(Article.created_at.desc()).limit(3).all()
-    
+    try:
+        article = Article.query.filter_by(slug=slug, is_active=True).first_or_404()
+    except Exception:
+        return render_template('blog-detail.html', article=None, related_articles=[]), 404
+
+    try:
+        article.view_count = (article.view_count or 0) + 1
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
+    try:
+        related_articles = Article.query.filter(
+            Article.category_id == article.category_id,
+            Article.article_id != article.article_id,
+            Article.is_active == True
+        ).order_by(Article.created_at.desc()).limit(3).all() or []
+    except Exception:
+        related_articles = []
+
     return render_template(
         'blog-detail.html',
         article=article,
@@ -145,15 +169,21 @@ def blog_detail(slug):
 def blog_list():
     page = request.args.get('page', 1, type=int)
     per_page = 12
-    articles = Article.query.filter_by(is_active=True)\
-        .order_by(Article.created_at.desc())\
-        .paginate(page=page, per_page=per_page, error_out=False)
-    
-    article_categories = ArticleCategory.query.filter_by(
-        parent_id=None,
-        is_active=True
-    ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
-    
+    try:
+        articles = Article.query.filter_by(is_active=True)\
+            .order_by(Article.created_at.desc())\
+            .paginate(page=page, per_page=per_page, error_out=False)
+    except Exception:
+        articles = []
+
+    try:
+        article_categories = ArticleCategory.query.filter_by(
+            parent_id=None,
+            is_active=True
+        ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all() or []
+    except Exception:
+        article_categories = []
+
     return render_template(
         'blog.html',
         articles=articles,
@@ -164,16 +194,26 @@ def blog_list():
 def blog_category(category_id):
     page = request.args.get('page', 1, type=int)
     per_page = 12
-    category = ArticleCategory.query.filter_by(category_id=category_id, is_active=True).first_or_404()
-    articles = Article.query.filter_by(category_id=category_id, is_active=True)\
-        .order_by(Article.created_at.desc())\
-        .paginate(page=page, per_page=per_page, error_out=False)
-    
-    article_categories = ArticleCategory.query.filter_by(
-        parent_id=None,
-        is_active=True
-    ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all()
-    
+    try:
+        category = ArticleCategory.query.filter_by(category_id=category_id, is_active=True).first_or_404()
+    except Exception:
+        return render_template('blog.html', articles=[], article_categories=[], current_category=None), 404
+
+    try:
+        articles = Article.query.filter_by(category_id=category_id, is_active=True)\
+            .order_by(Article.created_at.desc())\
+            .paginate(page=page, per_page=per_page, error_out=False)
+    except Exception:
+        articles = []
+
+    try:
+        article_categories = ArticleCategory.query.filter_by(
+            parent_id=None,
+            is_active=True
+        ).order_by(ArticleCategory.sort_order, ArticleCategory.name).all() or []
+    except Exception:
+        article_categories = []
+
     return render_template(
         'blog.html',
         articles=articles,
@@ -187,8 +227,11 @@ def blog_category(category_id):
 def products():
     page = int(request.args.get('page', 1))
     per_page = 20
-    query = Product.query.filter(Product.is_active == True)
-    products = query.order_by(Product.created_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
+    try:
+        query = Product.query.filter(Product.is_active == True)
+        products = query.order_by(Product.created_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
+    except Exception:
+        products = []
     return render_template('products.html', products=products)
 
 

@@ -21,7 +21,7 @@
     <!-- نوار بالا -->
     <div class="top-bar">
         <div class="ticker">
-            {% for t in site_texts.ticker_items %}
+            {% for t in site_texts.ticker_items|default([]) %}
             <span>{{ t }}</span>
             {% endfor %}
         </div>
@@ -31,7 +31,7 @@
     <header class="main-header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">{{ site_texts.logo_text }}</div>
+                <div class="logo">{{ site_texts.logo_text|default('شوفاژ حیدری') }}</div>
                 
                 <div class="search-bar">
                     <form method="GET" action="{{ url_for('search') }}">
@@ -86,7 +86,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>{{ site_texts.logo_text }}</h3>
-                    <p>{{ site_texts.footer_about }}</p>
+                    <p>{{ site_texts.footer_about|default('تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت') }}</p>
                 </div>
                 <div class="footer-section">
                     <h3>لینک‌های سریع</h3>
@@ -103,8 +103,8 @@
                 </div>
                 <div class="footer-section">
                     <h3>تماس با ما</h3>
-                    <p>تلفن: {{ site_texts.contact_phone }}</p>
-                    <p>موبایل: {{ site_texts.contact_mobile }}</p>
+                    <p>تلفن: {{ site_texts.contact_phone|default('021-55661234') }}</p>
+                    <p>موبایل: {{ site_texts.contact_mobile|default('09121234567') }}</p>
                     <p>آدرس: تهران - خیابان انقلاب</p>
                 </div>
             </div>
