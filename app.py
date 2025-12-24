@@ -63,6 +63,31 @@ def _get_setting_value(key, default=None):
     return default
 
 
+# Jinja filter to render numeric substrings left-to-right (useful for phone numbers)
+def ltr_numbers(value):
+    try:
+        import re
+        from markupsafe import Markup
+
+        if value is None:
+            return ''
+        s = str(value)
+        # match runs that contain at least two digits and may include + - () and spaces
+        pattern = re.compile(r"(\+?\d[\d\-\s\(\)]{1,}\d)")
+
+        def repl(m):
+            return f"<span class=\"ltr-num\" dir=\"ltr\">{m.group(1)}</span>"
+
+        result = pattern.sub(repl, s)
+        return Markup(result)
+    except Exception:
+        return value
+
+
+# register the filter
+app.jinja_env.filters['ltr_numbers'] = ltr_numbers
+
+
 @app.context_processor
 def inject_site_texts():
     # Provide a dict `site_texts` to templates with DB-backed values and fallbacks

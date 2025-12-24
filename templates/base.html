@@ -22,7 +22,7 @@
     <div class="top-bar">
         <div class="ticker">
             {% for t in site_texts.ticker_items|default([]) %}
-            <span>{{ t }}</span>
+            <span>{{ t|ltr_numbers }}</span>
             {% endfor %}
         </div>
     </div>
@@ -103,8 +103,8 @@
                 </div>
                 <div class="footer-section">
                     <h3>تماس با ما</h3>
-                    <p>تلفن: {{ site_texts.contact_phone|default('021-55661234') }}</p>
-                    <p>موبایل: {{ site_texts.contact_mobile|default('09121234567') }}</p>
+                    <p>تلفن: {{ site_texts.contact_phone|default('021-55661234')|ltr_numbers }}</p>
+                    <p>موبایل: {{ site_texts.contact_mobile|default('09121234567')|ltr_numbers }}</p>
                     <p>آدرس: تهران - خیابان انقلاب</p>
                 </div>
             </div>

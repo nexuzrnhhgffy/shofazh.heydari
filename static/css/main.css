@@ -337,3 +337,10 @@ footer {
     color:#777;
     font-size:14px;
 }
+
+/* Render numbers left-to-right inside RTL layout (phone numbers) */
+.ltr-num {
+    direction: ltr;
+    unicode-bidi: embed;
+    display: inline-block;
+}

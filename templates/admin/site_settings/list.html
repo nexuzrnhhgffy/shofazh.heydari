@@ -11,7 +11,7 @@
         {% for s in settings %}
         <tr>
           <td>{{ s.key }}</td>
-          <td style="max-width:60%">{{ s.value[:120] }}{% if s.value|length > 120 %}...{% endif %}</td>
+          <td style="max-width:60%">{{ (s.value[:120]|default(''))|ltr_numbers }}{% if s.value|length > 120 %}...{% endif %}</td>
           <td class="text-end">
             <a class="btn btn-sm btn-primary" href="{{ url_for('admin.site_setting_edit', key=s.key) }}">ویرایش</a>
             <form method="POST" action="{{ url_for('admin.site_settings_toggle' if false else 'admin.site_setting_toggle', key=s.key) }}" style="display:inline">
