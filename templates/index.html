@@ -1,20 +1,95 @@
 {% extends "base.html" %}
 
-{% block title %}فروشگاه تاسیسات حیدری - صفحه اصلی{% endblock %}
+{% block title %}فروشگاه تاسیسات حیدری - خرید پکیج، شوفاژ، رادیاتور و شیرآلات ساختمانی{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="فروشگاه تاسیسات حیدری - خرید آنلاین پکیج ایران رادیاتور، بوتان، شیرآلات قهرمان، لوله پنج لایه و رادیاتور پنلی با بهترین قیمت. ارسال رایگان به تهران و کرج">
+<meta name="keywords" content="پکیج، شوفاژ، رادیاتور، شیرآلات، تاسیسات ساختمانی، ایران رادیاتور، بوتان، قهرمان">
+<link rel="canonical" href="{{ request.url }}">
+<meta property="og:title" content="فروشگاه تاسیسات حیدری - خرید تاسیسات ساختمانی">
+<meta property="og:description" content="خرید آنلاین انواع تاسیسات ساختمانی با بهترین قیمت و ضمانت اصالت">
+<meta property="og:type" content="website">
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <style>
-.brands-section {
-    padding: 40px 0;
+/* Hero Section - Optimized */
+.hero-slider {
+    position: relative;
+    min-height: 400px;
+}
+
+/* Features Section */
+.features {
+    padding: 60px 0;
     background: #f8f9fa;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.feature-icon img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+/* Categories Section */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.category-card {
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.category-icon img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+}
+
+/* Brands Slider - Optimized */
+.brands-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .brands-slider-wrapper {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 50px;
+    padding: 0 60px;
 }
 
 .brands-slider {
@@ -23,6 +98,7 @@
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
+    scrollbar-color: #adb5bd #e9ecef;
 }
 
 .brands-slider::-webkit-scrollbar {
@@ -51,30 +127,31 @@
 
 .brand-item {
     flex: 0 0 200px;
-    padding: 20px;
+    padding: 24px;
     background: white;
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s;
 }
 
 .brand-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
 .brand-item img {
     max-height: 60px;
     max-width: 100%;
     object-fit: contain;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .brand-item h4 {
     font-size: 14px;
     color: #333;
     margin: 0;
+    font-weight: 600;
 }
 
 .brand-placeholder {
@@ -83,9 +160,10 @@
     align-items: center;
     justify-content: center;
     background: #f5f5f5;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
     font-weight: bold;
+    color: #666;
 }
 
 .slider-btn {
@@ -93,9 +171,9 @@
     top: 50%;
     transform: translateY(-50%);
     background: white;
-    border: none;
-    width: 40px;
-    height: 40px;
+    border: 2px solid #e9ecef;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     cursor: pointer;
@@ -104,10 +182,15 @@
     justify-content: center;
     z-index: 10;
     transition: all 0.3s;
+    font-size: 24px;
+    color: #333;
 }
 
 .slider-btn:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0,123,255,0.3);
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -118,97 +201,376 @@
 .slider-btn-right {
     right: 0;
 }
+
+/* Products Section */
+.products-section {
+    padding: 60px 0;
+}
+
+.slider-container {
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.slider-track {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+    scrollbar-width: thin;
+}
+
+.product-card {
+    flex: 0 0 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.product-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.product-card:hover .product-card-img {
+    transform: scale(1.05);
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-info h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.product-meta {
+    color: #6c757d;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 16px;
+}
+
+/* Blog Section */
+.blog-section {
+    padding: 60px 0;
+    background: #f8f9fa;
+}
+
+/* Video Section */
+.intro-video {
+    padding: 60px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.intro-video h3 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.intro-video p {
+    line-height: 1.8;
+    color: #666;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    margin: 60px 0 40px;
+    color: #333;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, #007bff, #28a745);
+    border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .intro-video {
+        grid-template-columns: 1fr;
+    }
+    
+    .brands-slider-wrapper {
+        padding: 0 40px;
+    }
+    
+    .slider-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Accessibility */
+.no-decoration {
+    text-decoration: none;
+    color: inherit;
+}
+
+.no-decoration:hover {
+    color: #007bff;
+}
+
+/* Performance - Lazy Loading Support */
+img[loading="lazy"] {
+    min-height: 100px;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="hero-slider">
-        <div class="slide-content">
-            <h2>تاسیسات ساختمان با بهترین قیمت</h2>
-            <p>پکیج ایران رادیاتور • بوتان • شیرآلات قهرمان • لوله پنج لایه • رادیاتور پنلی</p>
-            <button class="btn">همین حالا خرید کنید</button>
-        </div>
+<!-- Hero Section -->
+<section class="hero-slider" aria-label="بنر اصلی">
+    <div class="slide-content">
+        <h1>تاسیسات ساختمان با بهترین قیمت</h1>
+        <p>پکیج ایران رادیاتور • بوتان • شیرآلات قهرمان • لوله پنج لایه • رادیاتور پنلی</p>
+        <a href="{{ url_for('search') }}" class="btn" role="button">همین حالا خرید کنید</a>
     </div>
+</section>
 
-    <div class="features">
-        <div class="container">
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <img src="https://cdn-icons-png.flaticon.com/128/709/709790.png" alt="ارسال">
-                    </div>
-                    <h3>ارسال سریع</h3>
-                    <p>ارسال رایگان تهران و کرج</p>
+<!-- Features Section -->
+<section class="features" aria-label="ویژگی‌های فروشگاه">
+    <div class="container">
+        <div class="features-grid">
+            <article class="feature-item">
+                <div class="feature-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/128/709/709790.png" alt="" width="60" height="60" loading="lazy">
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <img src="https://cdn-icons-png.flaticon.com/128/1828/1828640.png" alt="ضمانت">
-                    </div>
-                    <h3>ضمانت اصالت</h3>
-                    <p>تمامی کالاها با فاکتور رسمی</p>
+                <h3>ارسال سریع</h3>
+                <p>ارسال رایگان تهران و کرج</p>
+            </article>
+            <article class="feature-item">
+                <div class="feature-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/128/1828/1828640.png" alt="" width="60" height="60" loading="lazy">
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <img src="https://cdn-icons-png.flaticon.com/128/2377/2377993.png" alt="نصب">
-                    </div>
-                    <h3>نصب توسط تیم حرفه‌ای</h3>
-                    <p>خدمات پس از فروش</p>
+                <h3>ضمانت اصالت</h3>
+                <p>تمامی کالاها با فاکتور رسمی</p>
+            </article>
+            <article class="feature-item">
+                <div class="feature-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377993.png" alt="" width="60" height="60" loading="lazy">
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <img src="https://cdn-icons-png.flaticon.com/128/2706/2706962.png" alt="پشتیبانی">
-                    </div>
-                    <h3>مشاوره رایگان</h3>
-                    <p>تلفنی و حضوری</p>
+                <h3>نصب توسط تیم حرفه‌ای</h3>
+                <p>خدمات پس از فروش</p>
+            </article>
+            <article class="feature-item">
+                <div class="feature-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2706/2706962.png" alt="" width="60" height="60" loading="lazy">
                 </div>
-            </div>
+                <h3>مشاوره رایگان</h3>
+                <p>تلفنی و حضوری</p>
+            </article>
         </div>
     </div>
-    
-    <h2 class="section-title">دسته‌بندی محصولات</h2>
-    <div class="category-grid">
+</section>
+
+<!-- Categories Section -->
+<section class="container" aria-labelledby="categories-title">
+    <h2 id="categories-title" class="section-title">دسته‌بندی محصولات</h2>
+    <nav class="category-grid" aria-label="دسته‌بندی محصولات">
         {% for c in categories|default([]) %}
-        <div class="category-card">
+        <article class="category-card">
             <div class="category-icon">
-                <img src="https://cdn-icons-png.flaticon.com/128/2062/2062614.png" alt="{{ c.category_name }}">
+                <img src="https://cdn-icons-png.flaticon.com/128/2062/2062614.png" alt="" width="64" height="64" loading="lazy">
             </div>
-            <h3><a class="no-decoration" href="{{ url_for('search') }}?category_id={{ c.category_id }}">{{ c.category_name }}</a></h3>
-        </div>
+            <h3>
+                <a class="no-decoration" href="{{ url_for('search') }}?category_id={{ c.category_id }}" aria-label="مشاهده محصولات {{ c.category_name }}">
+                    {{ c.category_name }}
+                </a>
+            </h3>
+        </article>
         {% else %}
         <div class="category-card">
             <h3>دسته‌ای یافت نشد</h3>
         </div>
         {% endfor %}
+    </nav>
+</section>
+
+<!-- Brands Section -->
+<section class="brands-section" aria-labelledby="brands-title">
+    <div class="container">
+        <h2 id="brands-title" class="section-title">برندهای معتبر</h2>
     </div>
-
-    <h2 class="section-title">برندها</h2>
-</div>
-
-<div class="brands-section">
     <div class="brands-slider-wrapper">
-        <button class="slider-btn slider-btn-left" onclick="scrollBrands(-1)" > › </button>
-        <div class="brands-slider" id="brandsSlider">
+        <button class="slider-btn slider-btn-left" onclick="scrollBrands(-1)" aria-label="اسلاید قبلی برندها">›</button>
+        <div class="brands-slider" id="brandsSlider" role="region" aria-label="لیست برندها">
             <div class="brands-track">
                 {% for b in brands|default([]) %}
-                <div class="brand-item">
-                    <a class="no-decoration" href="{{ url_for('search') }}?q={{ b.brand_name }}">
+                <article class="brand-item">
+                    <a class="no-decoration" href="{{ url_for('search') }}?q={{ b.brand_name }}" aria-label="مشاهده محصولات برند {{ b.brand_name }}">
                         {% if b.logo_url %}
-                        <img src="/{{ b.logo_url }}" alt="{{ b.brand_name }}">
+                        <img src="/{{ b.logo_url }}" alt="لوگوی {{ b.brand_name }}" width="200" height="60" loading="lazy">
                         {% else %}
                         <div class="brand-placeholder">{{ b.brand_name }}</div>
                         {% endif %}
                         <h4>{{ b.brand_name }}</h4>
                     </a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+        <button class="slider-btn slider-btn-right" onclick="scrollBrands(1)" aria-label="اسلاید بعدی برندها">‹</button>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="products-section" aria-labelledby="products-title">
+    <div class="container">
+        <h2 id="products-title" class="section-title">پرفروش‌ترین محصولات</h2>
+        <div class="slider-container">
+            <div class="slider-track">
+                {% for p in featured_products %}
+                <article class="product-card" itemscope itemtype="http://schema.org/Product">
+                    <div class="product-image">
+                        {% if p.image_url %}
+                        <img src="/{{ p.image_url }}" alt="{{ p.product_name }}" class="product-card-img" width="280" height="200" loading="lazy" itemprop="image">
+                        {% else %}
+                        <img src="https://via.placeholder.com/280x200?text=تصویر+ندارد" alt="{{ p.product_name }}" width="280" height="200" loading="lazy">
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h3 itemprop="name">
+                            <a class="no-decoration" href="{{ url_for('product_detail', slug=p.slug) }}">
+                                {{ p.product_name }}
+                            </a>
+                        </h3>
+                        <div class="product-meta" itemprop="brand">
+                            {{ p.brand.brand_name if p.brand else '' }}
+                        </div>
+                        {% set price = p.variants[0].retail_price if p.variants|length > 0 else None %}
+                        {% if price %}
+                        <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                            <meta itemprop="priceCurrency" content="IRR">
+                            <span itemprop="price">{{ price|currency }}</span>
+                        </div>
+                        {% endif %}
+                        <a href="{{ url_for('product_detail', slug=p.slug) }}" class="btn btn-sm btn-outline-primary" aria-label="مشاهده جزئیات {{ p.product_name }}">
+                            مشاهده جزئیات
+                        </a>
+                    </div>
+                </article>
+                {% else %}
+                <div class="product-card">
+                    <div class="product-info">
+                        <h3>هیچ محصولی موجود نیست</h3>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <button class="slider-btn slider-btn-right" onclick="scrollBrands(1)">‹</button>
     </div>
-</div>
+</section>
 
+<!-- Blog Section -->
+<section class="blog-section" aria-labelledby="blog-title">
+    <div class="container">
+        <h2 id="blog-title" class="section-title">بلاگ و مقالات آموزشی</h2>
+        <nav class="category-grid" aria-label="دسته‌بندی مقالات">
+            {% for cat in article_categories %}
+            <article class="category-card">
+                <div class="category-icon">
+                    <img src="{{ cat.icon_url|default('https://cdn-icons-png.flaticon.com/128/2869/2869863.png') }}" alt="" width="64" height="64" loading="lazy">
+                </div>
+                <h3>
+                    <a class="no-decoration" href="{{ url_for('blog_category', category_id=cat.category_id) }}" aria-label="مشاهده مقالات {{ cat.name }}">
+                        {{ cat.name }}
+                    </a>
+                </h3>
+                <p>{{ cat.description|default('مطالب مرتبط با ' + cat.name) }}</p>
+            </article>
+            {% endfor %}
+        </nav>
+    </div>
+</section>
+
+<!-- Video Section -->
+<section class="container intro-video" aria-labelledby="video-title">
+    <div>
+        <h3 id="video-title">معرفی کوتاه فروشگاه تاسیسات حیدری</h3>
+        <p>
+            فروشگاه تاسیسات حیدری با بیش از یک دهه تجربه در زمینه فروش و نصب تاسیسات ساختمانی، ارائه‌دهنده محصولات اصل و باکیفیت با بهترین قیمت‌های بازار است. ما با همکاری برندهای معتبر داخلی و خارجی، خدمات جامعی از مشاوره رایگان تا نصب و خدمات پس از فروش را به شما ارائه می‌دهیم.
+        </p>
+    </div>
+    <div>
+        <div id="58646588322" aria-label="ویدیو معرفی فروشگاه"></div>
+    </div>
+</section>
+
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "فروشگاه تاسیسات حیدری",
+  "description": "خرید آنلاین پکیج، شوفاژ، رادیاتور و شیرآلات ساختمانی",
+  "url": "{{ request.url_root }}",
+  "priceRange": "$$",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "محصولات تاسیسات ساختمانی",
+    "itemListElement": [
+      {% for c in categories|default([]) %}
+      {
+        "@type": "OfferCatalog",
+        "name": "{{ c.category_name }}",
+        "url": "{{ url_for('search', category_id=c.category_id, _external=True) }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
 <script>
+// Optimized smooth scrolling for brands
 function scrollBrands(direction) {
     const slider = document.getElementById('brandsSlider');
     const scrollAmount = 300;
@@ -217,65 +579,19 @@ function scrollBrands(direction) {
         behavior: 'smooth'
     });
 }
+
+// Lazy loading enhancement for images
+if ('loading' in HTMLImageElement.prototype) {
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+        img.src = img.src;
+    });
+} else {
+    // Fallback for browsers that don't support lazy loading
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    document.body.appendChild(script);
+}
 </script>
-
-<div class="container">
-    <h2 class="section-title">پرفروش‌ترین محصولات</h2>
-    <div class="slider-container">
-        <div class="slider-track">
-            {% for p in featured_products %}
-            <div class="product-card">
-                <div class="product-image">
-                    {% if p.image_url %}
-                        <img src="/{{ p.image_url }}" alt="{{ p.product_name }}" class="product-card-img">
-                    {% else %}
-                        <img src="https://via.placeholder.com/160?text=img" alt="{{ p.product_name }}">
-                    {% endif %}
-                </div>
-                <div class="product-info">
-                    <h3><a class="no-decoration" href="{{ url_for('product_detail', slug=p.slug) }}">{{ p.product_name }}</a></h3>
-                    <div class="product-meta">{{ p.brand.brand_name if p.brand else '' }}</div>
-                    {% set price = p.variants[0].retail_price if p.variants|length > 0 else None %}
-                    <div class="price">{{ price|currency }}</div>
-                    <a href="{{ url_for('product_detail', slug=p.slug) }}" class="btn btn-sm btn-outline-primary">مشاهده</a>
-                </div>
-            </div>
-            {% else %}
-            <div class="product-card"><div class="product-info"><h3>هیچ محصولی موجود نیست</h3></div></div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
-<h2 class="section-title">بلاگ و مقالات</h2>
-<div class="container">
-    <div class="category-grid">
-        {% for cat in article_categories %}
-        <div class="category-card">
-            <div class="category-icon">
-                <img src="{{ cat.icon_url|default('https://cdn-icons-png.flaticon.com/128/2869/2869863.png') }}" alt="{{ cat.name }}">
-            </div>
-            <h3><a class="no-decoration" href="{{ url_for('blog_category', category_id=cat.category_id) }}"> {{ cat.name }} </a></h3>
-            <p>{{ cat.description|default('مطالب مرتبط با ' + cat.name) }}</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<div class="intro-video">
-    <div>
-        <h3>معرفی کوتاه فروشگاه</h3>
-        <p>
-            اینجا می‌توانید متن معرفی فروشگاه خود را قرار دهید. توضیحاتی درباره محصولات و خدمات ارائه دهید تا بازدیدکننده‌ها سریع با فروشگاه آشنا شوند.
-        </p>
-    </div>
-    <div>
-        <div id="58646588322"></div>
-    </div>
-</div>
-
-{% block extra_js %}
-<script src="{{ url_for('static', filename='js/aparat-embed.js') }}"></script>
-{% endblock %}
-
+<script src="{{ url_for('static', filename='js/aparat-embed.js') }}" defer></script>
 {% endblock %}
