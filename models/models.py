@@ -374,3 +374,15 @@ class ContactMessage(db.Model, TimestampMixin):
 
     def __repr__(self):
         return f"<ContactMessage {self.message_id} from {self.name}>"
+
+
+class SiteSetting(db.Model, TimestampMixin):
+    __tablename__ = "site_settings"
+
+    key = db.Column(db.String(255), primary_key=True)
+    value = db.Column(db.Text)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    sort_order = db.Column(db.Integer, default=0, nullable=False)
+
+    def __repr__(self):
+        return f"<SiteSetting {self.key}>"

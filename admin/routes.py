@@ -14,6 +14,7 @@ from models import (
     Article,
     ArticleComment,
     ContactMessage,
+    SiteSetting,
 )
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="../templates/admin")
@@ -398,6 +399,57 @@ def category_add():
 
     slug = category_name.replace(" ", "-").lower()
     existing = Category.query.filter_by(slug=slug).first()
+
+
+# Site settings admin
+@admin_bp.route("/site-settings")
+def site_settings_list():
+    settings = SiteSetting.query.order_by(SiteSetting.key).all()
+    return render_template("site_settings/list.html", settings=settings)
+
+
+@admin_bp.route("/site-settings/edit/<string:key>", methods=["GET", "POST"])
+def site_setting_edit(key):
+    # support creating a new key via /site-settings/edit/new?key=the_key
+    if key == 'new' and request.method == 'GET':
+        proposed = request.args.get('key', '').strip()
+        if not proposed:
+            flash('کلید جدید مشخص نشده است.', 'warning')
+            return redirect(url_for('admin.site_settings_list'))
+        key = proposed
+
+    s = SiteSetting.query.get(key)
+    if request.method == "POST":
+        # allow creating when coming from the "new" flow
+        form_key = request.form.get('key') or key
+        value = request.form.get("value")
+        if s:
+            s.value = value
+        else:
+            s = SiteSetting(key=form_key, value=value)
+            db.session.add(s)
+        db.session.commit()
+        flash('تنظیمات ذخیره شد.', 'success')
+        return redirect(url_for('admin.site_settings_list'))
+    return render_template('site_settings/form.html', setting=s, key=key)
+
+
+@admin_bp.route('/site-settings/toggle/<string:key>', methods=['POST'])
+def site_setting_toggle(key):
+    s = SiteSetting.query.get_or_404(key)
+    s.is_active = not bool(s.is_active)
+    db.session.commit()
+    flash('وضعیت تنظیم تغییر کرد.', 'success')
+    return redirect(url_for('admin.site_settings_list'))
+
+
+@admin_bp.route('/site-settings/delete/<string:key>', methods=['POST'])
+def site_setting_delete(key):
+    s = SiteSetting.query.get_or_404(key)
+    db.session.delete(s)
+    db.session.commit()
+    flash('تنظیم حذف شد.', 'warning')
+    return redirect(url_for('admin.site_settings_list'))
     if existing:
         slug = f"{slug}-{Category.query.count() + 1}"
 

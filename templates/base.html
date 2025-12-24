@@ -21,12 +21,9 @@
     <!-- نوار بالا -->
     <div class="top-bar">
         <div class="ticker">
-            <!-- <span>تلفن: 021-55661234</span> -->
-            <span>واتساپ: 0912 926 5458</span>
-            <span>ارسال رایگان تهران و کرج</span>
-            <span>نصب حرفه‌ای پکیج و رادیاتور</span>
-            <span>ضمانت اصالت کالا</span>
-            <span>مشاوره رایگان تأسیسات</span>
+            {% for t in site_texts.ticker_items %}
+            <span>{{ t }}</span>
+            {% endfor %}
         </div>
     </div>
 
@@ -34,7 +31,7 @@
     <header class="main-header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">شوفاژ حیدری</div>
+                <div class="logo">{{ site_texts.logo_text }}</div>
                 
                 <div class="search-bar">
                     <form method="GET" action="{{ url_for('search') }}">
@@ -88,8 +85,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>فروشگاه تاسیسات حیدری</h3>
-                    <p>تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت</p>
+                    <h3>{{ site_texts.logo_text }}</h3>
+                    <p>{{ site_texts.footer_about }}</p>
                 </div>
                 <div class="footer-section">
                     <h3>لینک‌های سریع</h3>
@@ -106,8 +103,8 @@
                 </div>
                 <div class="footer-section">
                     <h3>تماس با ما</h3>
-                    <p>تلفن: 021-55661234</p>
-                    <p>موبایل: 09121234567</p>
+                    <p>تلفن: {{ site_texts.contact_phone }}</p>
+                    <p>موبایل: {{ site_texts.contact_mobile }}</p>
                     <p>آدرس: تهران - خیابان انقلاب</p>
                 </div>
             </div>

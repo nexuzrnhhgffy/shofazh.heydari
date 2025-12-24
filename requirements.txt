@@ -14,3 +14,4 @@ Pillow>=9.0.0
 cryptography>=40.0
 Flask-Session>=0.4
 Authlib>=1.2
+flask_sqlalchemy 

@@ -1,0 +1,21 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">ویرایش تنظیمات سایت</h5>
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">کلید</label>
+        <input class="form-control" value="{{ setting.key if setting else key }}" readonly>
+        <input type="hidden" name="key" value="{{ setting.key if setting else key }}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">مقدار</label>
+        <textarea name="value" class="form-control" rows="6">{{ setting.value if setting else '' }}</textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">ذخیره</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.site_settings_list') }}">انصراف</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

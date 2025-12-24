@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request
 
 from extensions import db
-from models import Product, Category, Brand,ArticleCategory, Article, ContactMessage
+from models import Product, Category, Brand,ArticleCategory, Article, ContactMessage, SiteSetting
 
 app = Flask(__name__)
 app.config.setdefault("UPLOAD_FOLDER", "static/uploads")
@@ -46,7 +46,53 @@ def inject_menu_categories():
         categories = [r[0] for r in rows]
         return dict(menu_categories=categories)
     except Exception:
-        return dict(menu_categories=[])
+        try:
+            categories = Category.query.filter_by(parent_id=None).order_by(Category.category_name).limit(3).all()
+            return dict(menu_categories=categories)
+        except Exception:
+            return dict(menu_categories=[])
+
+
+def _get_setting_value(key, default=None):
+    try:
+        row = SiteSetting.query.filter_by(key=key, is_active=True).first()
+        if row and row.value is not None:
+            return row.value
+    except Exception:
+        pass
+    return default
+
+
+@app.context_processor
+def inject_site_texts():
+    # Provide a dict `site_texts` to templates with DB-backed values and fallbacks
+    ticker_raw = _get_setting_value('ticker_items')
+    if ticker_raw:
+        # stored as newline-separated or JSON; simple split by newlines
+        ticker_items = [s.strip() for s in ticker_raw.split('\n') if s.strip()]
+    else:
+        ticker_items = [
+            'واتساپ: 0912 926 5458',
+            'ارسال رایگان تهران و کرج',
+            'نصب حرفه‌ای پکیج و رادیاتور',
+            'ضمانت اصالت کالا',
+            'مشاوره رایگان تأسیسات'
+        ]
+
+    logo_text = _get_setting_value('logo_text', 'شوفاژ حیدری')
+
+    footer_about = _get_setting_value('footer_about', 'تأمین کننده تجهیزات تأسیسات ساختمان با بهترین قیمت و ضمانت اصالت')
+
+    contact_phone = _get_setting_value('contact_phone', '021-55661234')
+    contact_mobile = _get_setting_value('contact_mobile', '09121234567')
+
+    return dict(site_texts={
+        'ticker_items': ticker_items,
+        'logo_text': logo_text,
+        'footer_about': footer_about,
+        'contact_phone': contact_phone,
+        'contact_mobile': contact_mobile,
+    })
 
 
 @app.route('/')

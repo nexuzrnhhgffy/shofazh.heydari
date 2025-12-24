@@ -1,0 +1,39 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">تنظیمات سایت</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr><th>کلید</th><th>مقدار (پیش‌نمایش)</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for s in settings %}
+        <tr>
+          <td>{{ s.key }}</td>
+          <td style="max-width:60%">{{ s.value[:120] }}{% if s.value|length > 120 %}...{% endif %}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-primary" href="{{ url_for('admin.site_setting_edit', key=s.key) }}">ویرایش</a>
+            <form method="POST" action="{{ url_for('admin.site_settings_toggle' if false else 'admin.site_setting_toggle', key=s.key) }}" style="display:inline">
+              <button class="btn btn-sm btn-outline-secondary" type="submit">{{ 'غیرفعال' if s.is_active else 'فعال' }}</button>
+            </form>
+            <form method="POST" action="{{ url_for('admin.site_setting_delete', key=s.key) }}" style="display:inline" onsubmit="return confirm('آیا از حذف این تنظیم مطمئن هستید؟');">
+              <button class="btn btn-sm btn-danger">حذف</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">تنظیمی یافت نشد.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr>
+    <form method="GET" action="{{ url_for('admin.site_setting_edit', key='new') }}">
+      <div class="input-group">
+        <input name="key" class="form-control" placeholder="کلید جدید (مثال: footer_about)">
+        <button class="btn btn-outline-secondary" type="submit">ایجاد</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

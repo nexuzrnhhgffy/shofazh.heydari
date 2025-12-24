@@ -14,7 +14,8 @@ from .models import (
     Article,
     ArticleComment,
     ArticleImage,
-    ContactMessage
+    ContactMessage,
+    SiteSetting
 )
 
 __all__ = [
@@ -33,5 +34,6 @@ __all__ = [
     "Article",
     "ArticleComment",
     "ArticleImage",
-    "ContactMessage"
+    "ContactMessage",
+    "SiteSetting"
 ]

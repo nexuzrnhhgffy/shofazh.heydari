@@ -24,3 +24,5 @@ dist/
 Thumbs.db
 Desktop.ini
 *.sqlite3
+*.pyc
+venv
