@@ -1,7 +1,7 @@
 {% extends 'admin/base.html' %}
 {% block content %}
 <h4>{% if category %}ویرایش گروه: {{ category.category_name }}{% else %}افزودن گروه جدید{% endif %}</h4>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   <div class="row">
     <div class="col-md-6 mb-3">
       <label class="form-label">نام گروه</label>
@@ -16,6 +16,13 @@
         {% endfor %}
       </select>
     </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">تصویر</label>
+    <input name="image" type="file" class="form-control" accept="image/*">
+    {% if category and category.image_url %}
+      <small class="form-text text-muted">تصویر فعلی: <a href="{{ category.image_url }}" target="_blank">مشاهده</a></small>
+    {% endif %}
   </div>
   <div class="row">
     <div class="col-md-6 mb-3">

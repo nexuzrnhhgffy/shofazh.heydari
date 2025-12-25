@@ -19,6 +19,7 @@
     <table class="table table-striped mb-0">
       <thead>
         <tr>
+          <th>تصویر</th>
           <th>نام گروه</th>
           <th>والد</th>
           <th>ترتیب</th>
@@ -29,6 +30,13 @@
       <tbody>
         {% for c in categories %}
           <tr>
+            <td>
+              {% if c.image_url %}
+                <img src="/{{ c.image_url }}" alt="{{ c.category_name }}" style="height:40px;object-fit:cover;border-radius:4px">
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
             <td>{{ c.category_name }}</td>
             <td>{{ c.parent.category_name if c.parent }}</td>
             <td>{{ c.sort_order }}</td>

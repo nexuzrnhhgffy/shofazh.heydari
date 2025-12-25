@@ -386,12 +386,14 @@ def category_add():
     if request.method == "GET":
         parent_categories = Category.query.filter(Category.parent_id.is_(None)).order_by(Category.category_name).all()
         return render_template("categories/form.html", parent_categories=parent_categories)
-
     data = request.form
     category_name = data.get("category_name")
     parent_id = data.get("parent_id")
     is_active = True if data.get("is_active") == "on" else False
     sort_order = int(data.get("sort_order", 0))
+
+    image = request.files.get("image")
+    image_path = save_image(image) if image and image.filename else None
 
     if not category_name:
         flash("نام دسته‌بندی الزامی است.", "danger")
@@ -399,6 +401,21 @@ def category_add():
 
     slug = category_name.replace(" ", "-").lower()
     existing = Category.query.filter_by(slug=slug).first()
+    if existing:
+        slug = f"{slug}-{Category.query.count() + 1}"
+
+    category = Category(
+        category_name=category_name,
+        slug=slug,
+        parent_id=int(parent_id) if parent_id else None,
+        is_active=is_active,
+        sort_order=sort_order,
+        image_url=image_path,
+    )
+    db.session.add(category)
+    db.session.commit()
+    flash("دسته‌بندی با موفقیت اضافه شد.", "success")
+    return redirect(url_for("admin.categories_list"))
 
 
 # Site settings admin
@@ -450,20 +467,6 @@ def site_setting_delete(key):
     db.session.commit()
     flash('تنظیم حذف شد.', 'warning')
     return redirect(url_for('admin.site_settings_list'))
-    if existing:
-        slug = f"{slug}-{Category.query.count() + 1}"
-
-    category = Category(
-        category_name=category_name,
-        slug=slug,
-        parent_id=int(parent_id) if parent_id else None,
-        is_active=is_active,
-        sort_order=sort_order
-    )
-    db.session.add(category)
-    db.session.commit()
-    flash("دسته‌بندی با موفقیت اضافه شد.", "success")
-    return redirect(url_for("admin.categories_list"))
 
 
 @admin_bp.route("/categories/edit/<int:category_id>", methods=["GET", "POST"])
@@ -478,6 +481,12 @@ def category_edit(category_id):
     parent_id = data.get("parent_id")
     category.is_active = True if data.get("is_active") == "on" else False
     category.sort_order = int(data.get("sort_order", 0))
+
+    image = request.files.get("image")
+    if image and image.filename:
+        image_path = save_image(image)
+        if image_path:
+            category.image_url = image_path
 
     if not category.category_name:
         flash("نام دسته‌بندی الزامی است.", "danger")

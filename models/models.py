@@ -47,6 +47,7 @@ class Category(db.Model, TimestampMixin):
     parent_id = db.Column(BIGINT(unsigned=True), db.ForeignKey("categories.category_id", ondelete="SET NULL"), nullable=True)
     category_name = db.Column(db.String(255), nullable=False)
     slug = db.Column(db.String(255), unique=True, nullable=False)
+    image_url = db.Column(db.String(500))
     is_active = db.Column(db.Boolean, default=True)
     sort_order = db.Column(db.Integer, default=0)
 
