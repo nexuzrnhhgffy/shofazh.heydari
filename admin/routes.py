@@ -1026,6 +1026,16 @@ def variant_edit(variant_id):
     return redirect(url_for("admin.variants_list"))
 
 
+@admin_bp.route("/variants/delete/<int:variant_id>", methods=["POST"])
+def variant_delete(variant_id):
+    variant = ProductVariant.query.get_or_404(variant_id)
+    variant.is_active = False  # soft-delete
+    db.session.commit()
+    flash("واریانت غیرفعال شد.", "warning")
+    return redirect(url_for("admin.variants_list"))
+
+
+
 @admin_bp.route("/contact-messages")
 def contact_messages_list():
     page = request.args.get('page', 1, type=int)
