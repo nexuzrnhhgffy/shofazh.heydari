@@ -1,12 +1,13 @@
 from sqlalchemy import func
+from datetime import datetime
 from sqlalchemy.dialects.mysql import BIGINT
 from sqlalchemy.orm import backref
 from extensions import db
 
 
 class TimestampMixin:
-    created_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, server_default=func.now(), onupdate=func.now(), nullable=False)
 
 
 class Vendor(db.Model, TimestampMixin):
