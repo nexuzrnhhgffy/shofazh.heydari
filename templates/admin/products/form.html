@@ -126,6 +126,8 @@
                       <option value="cm" {% if v.size_unit=='cm' %}selected{% endif %}>سانتی‌متر</option>
                       <option value="mm" {% if v.size_unit=='mm' %}selected{% endif %}>میلیمتر</option>
                       <option value="unit" {% if v.size_unit=='unit' %}selected{% endif %}>واحد</option>
+                      <option value="calorie" {% if v.size_unit=='calorie' %}selected{% endif %}>کالری</option>
+                      <option value="inch" {% if v.size_unit=='inch' %}selected{% endif %}>اینچ</option>
                     </select>
                   </td>
                   <td><input name="variant_wholesale" class="form-control" value="{{ v.wholesale_price }}"></td>
@@ -178,6 +180,8 @@
         <option value="cm">سانتی‌متر</option>
         <option value="mm">میلیمتر</option>
         <option value="unit">واحد</option>
+        <option value="calorie">کالری</option>
+        <option value="inch">اینچ</option>
       </select>
     </td>
     <td><input name="variant_wholesale" class="form-control"></td>

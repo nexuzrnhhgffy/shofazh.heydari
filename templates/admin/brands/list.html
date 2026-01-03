@@ -30,7 +30,7 @@
       <tbody>
         {% for b in brands %}
           <tr>
-            <td>{% if b.logo_url %}<img src="{{ b.logo_url }}" alt="{{ b.brand_name }}" style="width: 50px; height: 50px; object-fit: cover;">{% else %}-{% endif %}</td>
+            <td>{% if b.logo_url %}<img src="/{{ b.logo_url }}" alt="{{ b.brand_name }}" style="width: 50px; height: 50px; object-fit: cover;">{% else %}-{% endif %}</td>
             <td>{{ b.brand_name }}</td>
             <td>{{ b.english_name if b.english_name else '-' }}</td>
             <td>{{ b.description|truncate(50) if b.description }}</td>

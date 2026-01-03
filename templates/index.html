@@ -92,7 +92,7 @@
                     <a class="no-decoration" href="{{ url_for('search') }}?q={{ b.brand_name }}">
                         {% if b.logo_url %}
                         <img src="/{{ b.logo_url }}" alt="{{ b.brand_name }}">
-                        {% else %}
+                        {% else %} 
                         <div class="brand-placeholder">{{ b.brand_name }}</div>
                         {% endif %}
                         <h4>{{ b.brand_name }}</h4>
