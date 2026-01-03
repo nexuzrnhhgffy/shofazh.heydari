@@ -16,6 +16,8 @@ from models import (
     ContactMessage,
     SiteSetting,
 )
+import uuid
+
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="../templates/admin")
 
@@ -105,10 +107,12 @@ def products_list():
 def save_image(file_storage):
     if not file_storage:
         return None
-    filename = secure_filename(file_storage.filename)
+    original_filename = secure_filename(file_storage.filename)
+    ext = os.path.splitext(original_filename)[1]  # استخراج اکستنشن (مثل .jpg)
+    new_filename = uuid.uuid4().hex + ext  # تولید GUID منحصربه‌فرد + اکستنشن
     upload_folder = current_app.config.get("UPLOAD_FOLDER", "static/uploads")
     os.makedirs(upload_folder, exist_ok=True)
-    path = os.path.join(upload_folder, filename)
+    path = os.path.join(upload_folder, new_filename)
     file_storage.save(path)
     return path
 
